@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<script src=''>
+</script>
 <head>
 <style>
 body {
@@ -34,7 +36,17 @@ body {
 </style>
 <title>Main Page</title>
 </head>
-<body>
+<body onload='init()'>
+<script>
+  async function init(){
+    const data = await d3.csv('');
+    d3.select('body')
+      .selectAll('p')
+      .data(data)
+      .enter()
+      .append('p');
+  }
+</script>
 <h1 style="text-align: center;">Microsoft (MSFT) Stock Price History, 1986-2024</h1>
 <p style="text-align: center;"><i>daily market closing price data from Yahoo! Finance</i></p>
 <div class="center">
