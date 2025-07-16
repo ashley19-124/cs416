@@ -39,7 +39,7 @@ body {
 <body onload='init()'>
 <script>
   async function init(){
-    const data = await d3.csv('');
+    const data = await d3.csv('/Images/Microsoft_stock_data_cleaned.csv');
     d3.select('body')
       .selectAll('p')
       .data(data)
