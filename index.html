@@ -111,7 +111,7 @@ body {
           .attr("fill", "none")
           .attr("stroke", "steelblue")
           .attr("stroke-width", 1.5)
-          .attr("d", line(aapl));
+          .attr("d", line(data));
     
       return svg.node();
   }
@@ -119,7 +119,7 @@ body {
   y: {grid: true, label: "Daily close ($)"},
   marks: [
     Plot.ruleY([0]),
-    Plot.lineY(aapl, {x: "date", y: "close", stroke: "steelblue"})
+    Plot.lineY(data, {x: "date", y: "close", stroke: "steelblue"})
   ]})
 </script>
   
