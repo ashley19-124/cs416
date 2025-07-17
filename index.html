@@ -112,12 +112,6 @@ body {
     
       document.getElementById("chart").appendChild(svg.node());
   }
-  Plot.plot({
-  y: {grid: true, label: "Daily close ($)"},
-  marks: [
-    Plot.ruleY([0]),
-    Plot.lineY(data, {x: "date", y: "close", stroke: "steelblue"})
-  ]})
 </script>
 <p>Success! chart created</p>  
 </body>
