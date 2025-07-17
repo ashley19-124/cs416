@@ -53,9 +53,6 @@ body {
   <button class="button button1">Go next</button>
 </div>
   
-<svg class="chart" width="928" height="500">
-</svg>
-  
 <script>
   async function init(){
     const data = await d3.csv('/Images/Microsoft_stock_data_cleaned.csv');
@@ -122,6 +119,6 @@ body {
     Plot.lineY(data, {x: "date", y: "close", stroke: "steelblue"})
   ]})
 </script>
-  
+<p>Success! chart created</p>  
 </body>
 </html>
