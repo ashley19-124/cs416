@@ -52,7 +52,9 @@ body {
   <button class="button button1">Go back</button>
   <button class="button button1">Go next</button>
 </div>
-  
+
+<div id="chart" style="text-align: center; margin-top: 20px;"></div>
+
 <script>
   async function init(){
     const data = await d3.csv('/Images/Microsoft_stock_data_cleaned.csv');
