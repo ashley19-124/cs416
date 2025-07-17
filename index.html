@@ -110,7 +110,7 @@ body {
           .attr("stroke-width", 1.5)
           .attr("d", line(data));
     
-      return svg.node();
+      document.getElementById("chart").appendChild(svg.node());
   }
   Plot.plot({
   y: {grid: true, label: "Daily close ($)"},
