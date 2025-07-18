@@ -58,8 +58,8 @@ body {
 <script>
   async function init(){
     const data = await d3.csv('/Images/Microsoft_stock_data_cleaned.csv', d=> ({
-      date: new Date(d.date),
-      close: +d.close
+      date: new Date(d.Date),
+      close: +d.Close
     });
     chart = {
       // Declare the chart dimensions and margins.
