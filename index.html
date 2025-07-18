@@ -57,7 +57,7 @@ body {
 <div id="data-preview"></div>
 <script>
   async function init(){
-    const data = await d3.csv('/Images/Microsoft_stock_data_cleaned.csv', d=> ({
+    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d=> ({
       date: new Date(d.Date),
       close: +d.Close
     }));
