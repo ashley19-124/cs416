@@ -60,7 +60,7 @@ body {
     const data = await d3.csv('/Images/Microsoft_stock_data_cleaned.csv', d=> ({
       date: new Date(d.Date),
       close: +d.Close
-    });
+    }));
     chart = {
       // Declare the chart dimensions and margins.
       const width = 928;
