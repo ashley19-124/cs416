@@ -54,14 +54,22 @@ body {
 </div>
 
 <div id="chart" style="text-align: center; margin-top: 20px;"></div>
-
+<div id="preview"></div>
 <script>
   async function init(){
     const data = await d3.csv('/Images/Microsoft_stock_data_cleaned.csv', d=> ({
       date: new Date(d.Date),
       close: +d.Close
     }));
-    console.log(data.slice(0, 5));
+
+    const preview = d3.select("#data-preview");
+
+    preview.append("h3").text("First 5 Rows of Data");
+
+    data.slice(0, 5).forEach(d => {
+    preview.append("div").text(`Date: ${d3.timeFormat("%Y-%m-%d")(d.date)}, Close: ${d.close}`);
+    });
+    
     // Declare the chart dimensions and margins.
     const width = 928;
     const height = 500;
