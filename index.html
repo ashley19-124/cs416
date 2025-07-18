@@ -70,11 +70,15 @@ body {
     const marginLeft = 40;
   
     // Declare the x (horizontal position) scale.
-    const x = d3.scaleUtc(d3.extent(data, d => d.date), [marginLeft, width - marginRight]);
+    const x = d3.scaleUtc()
+      .domain(d3.extent(data, d => d.date))
+      .range([marginLeft, width - marginRight]);
   
     // Declare the y (vertical position) scale.
-    const y = d3.scaleLinear([0, d3.max(data, d => d.close)], [height - marginBottom, marginTop]);
-  
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.close)])
+      .range([height - marginBottom, marginTop]);  
+    
     // Declare the line generator.
     const line = d3.line()
         .x(d => x(d.date))
