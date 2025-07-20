@@ -182,7 +182,7 @@ body {
     const dot = svg.append("circle")
       .attr("r", 10)
       .attr("fill", "red")
-      .style("opacity", 0); // hidden at first
+      .style("opacity", 1); // hidden at first
     
     const interval = d3.interval(() => {
       if (i >= data.length) {
