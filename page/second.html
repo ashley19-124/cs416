@@ -175,6 +175,18 @@ body {
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
         .attr("d", line(data));
+    
+    // Get the total length of the path
+    const totalLength = path.node().getTotalLength();
+
+    // animate 
+    path
+      .attr("stroke-dasharray", totalLength + " " + totalLength)
+      .attr("stroke-dashoffset", totalLength)
+      .transition()
+      .duration(2000) // adjust duration as needed
+      .ease(d3.easeLinear)
+      .attr("stroke-dashoffset", 0);
   
     document.getElementById("chart").appendChild(svg.node());
   }
