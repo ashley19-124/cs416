@@ -112,6 +112,14 @@ body {
     // tooltip div
     const tooltip = d3.select("#tooltip");
 
+    // indicator with tooltip 
+    const hoverLine = svg.append("line")
+      .attr("stroke", "gray")
+      .attr("stroke-width", 1)
+      .attr("y1", marginTop)
+      .attr("y2", height - marginBottom)
+      .attr("visibility", "hidden");
+
     // x axis
     svg.append("g")
         .attr("transform", `translate(0,${height - marginBottom})`)
@@ -153,9 +161,14 @@ body {
                    <strong>Volume:</strong> ${d.volume}<br>`)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 28) + "px");
+          hoverLine
+            .attr("x1", x(d.date))
+            .attr("x2", x(d.date))
+            .attr("visibility", "visible");
         })
       .on("mouseout", function() {
         tooltip.style("opacity", 0);
+        hoverLine.style("opacity", 0);
         });
     
     // line path
