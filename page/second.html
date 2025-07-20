@@ -168,13 +168,6 @@ body {
         tooltip.style("opacity", 0);
         hoverLine.style("visibility", "hidden");
         });
-    
-    // line path
-    const path1 = svg.append("path")
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("d", line(data));
 
     let lineData = [];
     let i = 0;
