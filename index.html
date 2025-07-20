@@ -61,8 +61,9 @@ body {
   border: 1px solid gray;
   padding: 8px;
   font-size: 12px;
-  pointer-events: all;
+  pointer-events: none;
   border-radius: 4px;
+  z-index: 10;
 "></div>
 
 <div id="chart" style="text-align: center; margin-top: 20px;"></div>
@@ -139,6 +140,7 @@ body {
         .attr("cy", d => y(d.close))
         .attr("r", 3)
         .attr("fill", "none")
+        .attr("pointer-events", "all")
         .on("mouseover", function(event, d) {
           tooltip
             .style("opacity", 1)
