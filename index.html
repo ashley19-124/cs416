@@ -87,6 +87,14 @@ body {
     const marginBottom = 30;
     const marginLeft = 40;
   
+    // indicator with tooltip 
+    const hoverLine = svg.append("line")
+      .attr("stroke", "gray")
+      .attr("stroke-width", 1)
+      .attr("y1", marginTop)
+      .attr("y2", height - marginBottom)
+      .attr("visibility", "hidden");
+    
     // x axis scaling
     const x = d3.scaleUtc()
       .domain(d3.extent(data, d => d.date))
@@ -111,14 +119,6 @@ body {
   
     // tooltip div
     const tooltip = d3.select("#tooltip");
-
-    // indicator with tooltip 
-    const hoverLine = svg.append("line")
-      .attr("stroke", "gray")
-      .attr("stroke-width", 1)
-      .attr("y1", marginTop)
-      .attr("y2", height - marginBottom)
-      .attr("visibility", "hidden");
 
     // x axis
     svg.append("g")
