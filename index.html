@@ -133,13 +133,14 @@ body {
             .text("↑ Daily close ($)"));
     
     svg.append("g")
-      .selectAll("circle")
+      .selectAll("rect")
       .data(data)
-      .join("circle")
-        .attr("cx", d => x(d.date))
-        .attr("cy", d => y(d.close))
-        .attr("r", 3)
-        .attr("fill", "none")
+      .join("rect")
+        .attr("x", d => x(d.date) - 5)           
+        .attr("width", 10)                       
+        .attr("y", marginTop)
+        .attr("height", height - marginTop - marginBottom)
+        .attr("fill", "transparent")
         .attr("pointer-events", "all")
         .on("mouseover", function(event, d) {
           tooltip
