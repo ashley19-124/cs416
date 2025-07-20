@@ -71,7 +71,11 @@ body {
   async function init(){
     const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d=> ({
       date: new Date(d.Date),
-      close: +d.Close
+      close: +d.Close,
+      high: +d.High,
+      low: +d.Low,
+      open: +d.Open,
+      volume: +d.Volume
     }));
 
     // Declare the chart dimensions and margins.
@@ -138,12 +142,12 @@ body {
         .on("mouseover", function(event, d) {
           tooltip
             .style("opacity", 1)
-            .html(`<strong>Date:</strong> ${d.Date.toLocaleDateString()}<br>
-                   <strong>Close:</strong> $${d.Close.toFixed(2)}<br>
-                   <strong>High:</strong> $${d.High.toFixed(2)}<br>
-                   <strong>Low:</strong> $${d.Low.toFixed(2)}<br>
-                   <strong>Open:</strong> $${d.Open.toFixed(2)}<br>
-                   <strong>Volume:</strong> $${d.Volume.toFixed(2)}<br>`)
+            .html(`<strong>Date:</strong> ${d.date.toLocaleDateString()}<br>
+                   <strong>Close:</strong> $${d.close.toFixed(2)}<br>
+                   <strong>High:</strong> $${d.high.toFixed(2)}<br>
+                   <strong>Low:</strong> $${d.low.toFixed(2)}<br>
+                   <strong>Open:</strong> $${d.open.toFixed(2)}<br>
+                   <strong>Volume:</strong> $${d.volume.toFixed(2)}<br>`)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 28) + "px");
         })
