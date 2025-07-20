@@ -177,13 +177,7 @@ body {
       .attr("fill", "none")
       .attr("stroke", "steelblue")
       .attr("stroke-width", 2);
-    
-    // Append the dot (initially invisible)
-    const dot = svg.append("circle")
-      .attr("r", 10)
-      .attr("fill", "red")
-      .style("opacity", 1); // hidden at first
-    
+        
     const interval = d3.interval(() => {
       if (i >= data.length) {
         interval.stop();
@@ -198,12 +192,6 @@ body {
       const currentPoint = data[i];
       const cx = x(currentPoint.date);
       const cy = y(currentPoint.volume);
-    
-      // Move the dot and make it visible
-      dot
-        .attr("cx", cx)
-        .attr("cy", cy)
-        .style("opacity", 1);
     
       i++;
     }, 20); // delay in ms
