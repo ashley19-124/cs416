@@ -175,18 +175,45 @@ body {
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
         .attr("d", line(data));
-    
-    // Get the total length of the path
-    const totalLength = path.node().getTotalLength();
 
-    // animate 
-    path
-      .attr("stroke-dasharray", totalLength)
-      .attr("stroke-dashoffset", totalLength)
-      .transition()
-      .duration(10000)
-      .ease(d3.easeLinear)
-      .attr("stroke-dashoffset", 0);
+    let lineData = [];
+    let i = 0;
+    
+    const path = svg.append("path")
+      .datum(lineData)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 2);
+    
+    // Append the dot (initially invisible)
+    const dot = svg.append("circle")
+      .attr("r", 4)
+      .attr("fill", "red")
+      .style("opacity", 0); // hidden at first
+    
+    const interval = d3.interval(() => {
+      if (i >= data.length) {
+        interval.stop();
+        return;
+      }
+    
+      // Add next point and redraw path
+      lineData.push(data[i]);
+      path.datum(lineData).attr("d", line);
+    
+      // Get current point
+      const currentPoint = data[i];
+      const cx = x(currentPoint.date);
+      const cy = y(currentPoint.volume);
+    
+      // Move the dot and make it visible
+      dot
+        .attr("cx", cx)
+        .attr("cy", cy)
+        .style("opacity", 1);
+    
+      i++;
+    }, 20); // delay in ms
   
     document.getElementById("chart").appendChild(svg.node());
   }
