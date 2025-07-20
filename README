@@ -1,4 +1,20 @@
 CS416 Data Visualization Final Project
-Narrative Visualization
+Narrative Visualization of Microsoft Stock Prices (1986-2024)
+
+Structure: martini glass
+
 Data source: https://www.kaggle.com/datasets/taimoor888/microsoft-stock-price-data-19862024
-Num. of Scenes: 3 (min. 3)
+  (Kaggle dataset compiled from data extracted from Yahoo! Finanace)
+
+Table of Contets/Navigation Guide:
+  + Index/Landing Page (also ending of "martini glass" narrative visualization)
+    - clicking "start over" loads the true "first page" of the visualization
+  + First Page
+    - brief history of founding 
+    - Microsoft IPO in 1986 to 1994 (Windows 1.0 and Microsoft Office)
+    - Key Dates:
+      * 03.13.86 IPO w/ NASDAQ
+      * 1990 Federal Trade Commission investigates for potential collusion w/ IBM
+      * 
+  + Second Page
+    - b
