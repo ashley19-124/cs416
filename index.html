@@ -115,7 +115,7 @@ body {
       .attr("stroke-width", 1)
       .attr("y1", marginTop)
       .attr("y2", height - marginBottom)
-      .attr("visibility", "hidden");
+      .style("visibility", "hidden");
     
     // tooltip div
     const tooltip = d3.select("#tooltip");
@@ -164,7 +164,7 @@ body {
           hoverLine
             .attr("x1", x(d.date))
             .attr("x2", x(d.date))
-            .attr("visibility", "visible");
+            .style("visibility", "visible");
         })
       .on("mouseout", function() {
         tooltip.style("opacity", 0);
