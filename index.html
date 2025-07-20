@@ -66,7 +66,7 @@ body {
 "></div>
 
 <div id="chart" style="text-align: center; margin-top: 20px;"></div>
-<div id="data-preview"></div>
+
 <script>
   async function init(){
     const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d=> ({
@@ -138,7 +138,7 @@ body {
         .attr("cx", d => x(d.date))
         .attr("cy", d => y(d.close))
         .attr("r", 3)
-        .attr("fill", "steelblue")
+        .attr("fill", "none")
         .on("mouseover", function(event, d) {
           tooltip
             .style("opacity", 1)
