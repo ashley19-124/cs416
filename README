@@ -9,11 +9,16 @@ Data source: https://www.kaggle.com/datasets/taimoor888/microsoft-stock-price-da
 Table of Contets/Navigation Guide:
   + Index/Landing Page (also ending of "martini glass" narrative visualization)
     - clicking "start over" loads the true "first page" of the visualization
-  + First Page
-    - brief history of founding 
-  + Second Page
-    - Microsoft IPO in 1986 to 1994 (Windows 1.0 and Microsoft Office)
-    - Key Dates:
-      * 03.13.86 IPO w/ NASDAQ
-      * 1990 Federal Trade Commission investigates for potential collusion w/ IBM
-      * 
+  + First (intro) Scene
+    - brief history of founding & information on founders
+  + Second Scene
+    - Microsoft IPO in 1986 to 2007 
+      (Windows 1.0 and Microsoft Office to Windows XP and Xbox)
+  + Third Scene
+    - 2007 to 2020
+      (Windows 7 to Windows 10 and Microsoft Edge)
+  + Fourth Scene
+    - 2020 to present
+      (Acquisitions, Windows 11, and beyond)
+  + Final Scene
+    - Free exploration chart of all stock data
