@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.center {
+  text-align: center;
+}
+.button {
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: auto;
+  transition-duration: 0.4s;
+}
+.button:disabled{
+  opacity: 0;
+}
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid steelblue;
+  opacity: 1;
+}
+.button1:hover:not(:disabled) {
+  background-color: steelblue;
+  opacity: 0.5;
+  color: white;
+}
+</style>
+
+<title>Main Page</title>
+  
+</head>
+  
+<body onload='init()'>
+<h1 style="text-align: center;">Microsoft (MSFT) Stock Price History, 1986-2024</h1>
+<p style="text-align: center;">
+  <i>daily market closing price data from 
+    <a href="https://www.kaggle.com/datasets/taimoor888/microsoft-stock-price-data-19862024">
+      Yahoo! Finance</a>
+  </i>
+</p>
+  
+<div class="center">
+  <a href="https://ashley19-124.github.io/cs416/page/second.html" class="button button1">Back</a>
+  <a href="https://ashley19-124.github.io/cs416/index.html" class="button button1">Next</a>
+</div>
+
+<div id="chart" style="text-align: center; margin-top: 20px;"></div>
+<div id="data-preview"></div>
+<script>
+  async function init(){
+    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d=> ({
+      date: new Date(d.Date),
+      close: +d.Close
+    }));
+
+    // Declare the chart dimensions and margins.
+    const width = 928;
+    const height = 500;
+    const marginTop = 20;
+    const marginRight = 30;
+    const marginBottom = 30;
+    const marginLeft = 40;
+  
+    // Declare the x (horizontal position) scale.
+    const x = d3.scaleUtc()
+      .domain(d3.extent(data, d => d.date))
+      .range([marginLeft, width - marginRight]);
+  
+    // Declare the y (vertical position) scale.
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.close)])
+      .range([height - marginBottom, marginTop]);  
+    
+    // Declare the line generator.
+    const line = d3.line()
+        .x(d => x(d.date))
+        .y(d => y(d.close));
+  
+    // Create the SVG container.
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+  
+    // Add the x-axis.
+    svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
+  
+    // Add the y-axis, remove the domain line, add grid lines and a label.
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y).ticks(height / 40))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").clone()
+            .attr("x2", width - marginLeft - marginRight)
+            .attr("stroke-opacity", 0.1))
+        .call(g => g.append("text")
+            .attr("x", -marginLeft)
+            .attr("y", 10)
+            .attr("fill", "currentColor")
+            .attr("text-anchor", "start")
+            .text("↑ Daily close ($)"));
+  
+    // Append a path for the line.
+    svg.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("d", line(data));
+  
+    document.getElementById("chart").appendChild(svg.node());
+  }
+</script>
