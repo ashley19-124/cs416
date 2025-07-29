@@ -3,6 +3,7 @@
   
 <head>
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/d3-svg-annotation@2.5.1/d3-annotation.min.js"></script>
 <style>
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -117,7 +118,7 @@ body {
     
     // tooltip div
     const tooltip = d3.select("#tooltip");
-
+    
     // x axis
     svg.append("g")
         .attr("transform", `translate(0,${height - marginBottom})`)
@@ -195,7 +196,7 @@ body {
     
       i++;
     }, 5); // delay in ms
-  
+
     document.getElementById("chart").appendChild(svg.node());
   }
 </script>
