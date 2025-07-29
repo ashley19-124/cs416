@@ -52,14 +52,14 @@ body {
   
 <div class="center">
   <a href="https://ashley19-124.github.io/cs416/page/second.html" class="button button1">Back</a>
-  <a href="https://ashley19-124.github.io/cs416/fourth.html" class="button button1">Next</a>
+  <a href="https://ashley19-124.github.io/cs416/page/fourth.html" class="button button1">Next</a>
 </div>
 
 <div id="chart" style="text-align: center; margin-top: 20px;"></div>
 <div id="data-preview"></div>
 <script>
   async function init(){
-    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d=> ({
+    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%202007%20to%202020.csv", d=> ({
       date: new Date(d.Date),
       close: +d.Close
     }));
