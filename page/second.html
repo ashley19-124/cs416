@@ -68,7 +68,7 @@ body {
 
 <script>
   async function init(){
-    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_86-94.csv", d=> ({
+    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%201986%20to%202007.csv", d=> ({
       date: new Date(d.Date),
       close: +d.Close,
       high: +d.High,
