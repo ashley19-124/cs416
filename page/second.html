@@ -43,11 +43,13 @@ body {
 .annotation-note-title {
   font-weight: bold;
   font-size: 11px;
+  dominant-baseline: hanging;
 }
 .annotation-note-label {
   font-size: 10px;
   margin-top: 4px;
   display: block;
+  dominant-baseline: hanging;
 }
 </style>
 
@@ -141,12 +143,11 @@ body {
         note: {
           title: "March 13, 1986",
           label: "Microsoft Initial Public Offering",
-          wrap: 200
         },
         x: x(pointa.date),
         y: y(pointa.close),
         dx: 20,
-        dy: -50
+        dy: -30
       }
     ];
 
