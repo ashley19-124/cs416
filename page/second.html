@@ -118,7 +118,24 @@ body {
     
     // tooltip div
     const tooltip = d3.select("#tooltip");
-    
+
+    // annotations
+    const datea = new Date("1986-03-13");
+    const pointa = data.find(d => d.date.getTime() === datea.getTime()); 
+
+    const annotations = [
+      {
+        note: {
+          title: "March 13, 1986",
+          label: "Microsoft Initial Public Offering"
+        },
+        x: x(pointa.date),
+        y: y(pointa.close),
+        dx: 20,
+        dy: -30
+      }
+    ];
+
     // x axis
     svg.append("g")
         .attr("transform", `translate(0,${height - marginBottom})`)
@@ -170,6 +187,13 @@ body {
         hoverLine.style("visibility", "hidden");
         });
 
+    //annotations
+    const makeAnnotations = d3.annotation().annotations(annotations);
+    
+    svg.append("g")
+      .attr("class", "annotation-group")
+      .call(makeAnnotations);
+    
     let lineData = [];
     let i = 0;
     
