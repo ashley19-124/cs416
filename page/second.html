@@ -115,7 +115,7 @@ body {
         .y(d => y(d.close));
   
     // svg canvas
-   const svg = d3.select("body").append("svg")
+   const svg = d3.select("#chart").append("svg")
         .attr("width", width)
         .attr("height", height)
         .attr("viewBox", [0, 0, width, height])
