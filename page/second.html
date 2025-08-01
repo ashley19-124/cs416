@@ -213,11 +213,11 @@ body {
       .each(function (d) {
         const noteGroup = d3.select(this).select(".annotation-note");
         const existingText = noteGroup.select("text");
-        
+    
         if (!existingText.empty()) {
           const lines = d.note.label.split("\n");
           existingText.selectAll("*").remove(); // Clear default
-        
+    
           lines.forEach((line, i) => {
             existingText
               .append("tspan")
@@ -226,17 +226,6 @@ body {
               .text(line);
           });
         }
-        const lines = d.note.label.split("\n");
-    
-        note.selectAll("*").remove(); // Clear default
-    
-        lines.forEach((line, i) => {
-          note
-            .append("tspan")
-            .attr("x", 0)
-            .attr("dy", i === 0 ? "1em" : "1.2em")
-            .text(line);
-        });
       });
     
     let lineData = [];
