@@ -204,7 +204,11 @@ body {
         });
 
     //annotations
-    const makeAnnotations = d3.annotation().type(d3.annotationLabel).annotations(annotations)
+    const makeAnnotations = d3.annotation()
+      .editMode(true)
+      .notePadding(15)
+      .type(d3.annotationLabel)
+      .annotations(annotations)
     
     svg.append("g")
       .attr("class", "annotation-group")
