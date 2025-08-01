@@ -136,24 +136,22 @@ body {
     const datea = new Date("1986-03-13");
     const pointa = data.find(d => d.date.getTime() === datea.getTime()); 
 
-    if (pointa) {
-      const annotations = [
-        {
-          note: {
-            title: "03-13-86, Microsoft IPO",
-            label: "Closing Price: $0.06"
-        ]
-          },
-          connector: {
-            end: "arrow"
-          },
-          x: x(pointa.date),
-          y: y(pointa.close),
-          dx: 20,
-          dy: -30
-        }
+    const annotations = [
+      {
+        note: {
+          title: "03-13-86, Microsoft IPO",
+          label: "Closing Price: $0.06"
       ]
-    };
+        },
+        connector: {
+          end: "arrow"
+        },
+        x: x(pointa.date),
+        y: y(pointa.close),
+        dx: 20,
+        dy: -30
+      }
+    ];
 
     // x axis
     svg.append("g")
