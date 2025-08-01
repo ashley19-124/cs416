@@ -1,205 +1,185 @@
 <!DOCTYPE html>
 <html>
-  
 <head>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://unpkg.com/d3-svg-annotation@2.5.1/d3-annotation.min.js"></script>
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-.center {
-  text-align: center;
-}
-.button {
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  margin: auto;
-  transition-duration: 0.4s;
-}
-.button:disabled{
-  opacity: 0;
-}
-.button1 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid steelblue;
-  opacity: 1;
-}
-.button1:hover:not(:disabled) {
-  background-color: steelblue;
-  opacity: 0.5;
-  color: white;
-}
-</style>
-
-<title>Main Page</title>
-  
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://unpkg.com/d3-svg-annotation@2.5.1/d3-annotation.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .center {
+      text-align: center;
+    }
+    .button {
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      font-size: 12px;
+      margin: auto;
+      transition-duration: 0.4s;
+    }
+    .button1 {
+      background-color: white; 
+      color: black; 
+      border: 2px solid steelblue;
+    }
+    .button1:hover:not(:disabled) {
+      background-color: steelblue;
+      opacity: 0.5;
+      color: white;
+    }
+  </style>
+  <title>Main Page</title>
 </head>
-  
-<body onload='init()'>
-<h1 style="text-align: center;">Microsoft (MSFT) Stock Price History</h1>
-<p style="text-align: center;">
-  <i>2020 to present: Windows 11, acquisitions, and more</i>
-</p>
-  
-<div class="center">
-  <a href="https://ashley19-124.github.io/cs416/page/third.html" class="button button1">Back</a>
-  <a href="https://ashley19-124.github.io/cs416/index.html" class="button button1">Next</a>
-</div>
 
-<div id="tooltip" style="
-  position: absolute;
-  opacity: 0;
-  background: white;
-  border: 1px solid gray;
-  padding: 8px;
-  font-size: 12px;
-  pointer-events: none;
-  border-radius: 4px;
-  z-index: 10;
-"></div>
+<body onload="init()">
+  <h1 style="text-align: center;">Microsoft (MSFT) Stock Price History</h1>
+  <p style="text-align: center;"><i>2020 to today: Windows 10, acquisitions, and more</i></p>
+  <div class="center">
+    <a href="third.html" class="button button1">Back</a>
+    <a href="index.html" class="button button1">Next</a>
+  </div>
 
-<div id="chart" style="text-align: center; margin-top: 20px;"></div>
+  <div id="chart" style="text-align: center; margin-top: 20px;"></div>
 
-<script>
-  async function init(){
-    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%202020%20to%20present.csv", d=> ({
-      date: new Date(d.Date),
-      close: +d.Close,
-      high: +d.High,
-      low: +d.Low,
-      open: +d.Open,
-      volume: +d.Volume
-    }));
+  <script>
+    function init() {
+      d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%202020%20to%20present.csv", function(d) {
+        return {
+          date: new Date(d.Date),
+          close: +d.Close,
+          high: +d.High,
+          low: +d.Low,
+          open: +d.Open,
+          volume: +d.Volume
+        };
+      }, function(error, data) {
+        if (error) throw error;
 
-    // Declare the chart dimensions and margins.
-    const width = 928;
-    const height = 500;
-    const marginTop = 20;
-    const marginRight = 30;
-    const marginBottom = 30;
-    const marginLeft = 40;
-    
-    // x axis scaling
-    const x = d3.scaleUtc()
-      .domain(d3.extent(data, d => d.date))
-      .range([marginLeft, width - marginRight]);
-  
-    // y axis scaling
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.close)])
-      .range([height - marginBottom, marginTop]);  
-    
-    // line generator
-    const line = d3.line()
-        .x(d => x(d.date))
-        .y(d => y(d.close));
-  
-    // svg canvas
-    const svg = d3.create("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [0, 0, width, height])
-        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-  
-    // indicator with tooltip 
-    const hoverLine = svg.append("line")
-      .attr("stroke", "gray")
-      .attr("stroke-width", 1)
-      .attr("y1", marginTop)
-      .attr("y2", height - marginBottom)
-      .style("visibility", "hidden");
-    
-    // tooltip div
-    const tooltip = d3.select("#tooltip");
-    
-    // x axis
-    svg.append("g")
-        .attr("transform", `translate(0,${height - marginBottom})`)
-        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
-  
-    // y axis
-    svg.append("g")
-        .attr("transform", `translate(${marginLeft},0)`)
-        .call(d3.axisLeft(y).ticks(height / 40))
-        .call(g => g.select(".domain").remove())
-        .call(g => g.selectAll(".tick line").clone()
+        const width = 928, height = 500;
+        const marginTop = 20, marginRight = 30, marginBottom = 30, marginLeft = 40;
+
+        const x = d3.scaleTime()
+          .domain(d3.extent(data, d => d.date))
+          .range([marginLeft, width - marginRight]);
+
+        const y = d3.scaleLinear()
+          .domain([0, d3.max(data, d => d.close)]).nice()
+          .range([height - marginBottom, marginTop]);
+
+        const line = d3.line()
+          .x(d => x(d.date))
+          .y(d => y(d.close));
+
+        const svg = d3.select("#chart").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+        // X Axis
+        svg.append("g")
+          .attr("transform", `translate(0,${height - marginBottom})`)
+          .call(d3.axisBottom(x).ticks(width / 80));
+
+        // Y Axis
+        svg.append("g")
+          .attr("transform", `translate(${marginLeft},0)`)
+          .call(d3.axisLeft(y))
+          .call(g => g.select(".domain").remove())
+          .call(g => g.selectAll(".tick line").clone()
             .attr("x2", width - marginLeft - marginRight)
             .attr("stroke-opacity", 0.1))
-        .call(g => g.append("text")
+          .call(g => g.append("text")
             .attr("x", -marginLeft)
             .attr("y", 10)
             .attr("fill", "currentColor")
             .attr("text-anchor", "start")
             .text("↑ Daily close ($)"));
-    
-    svg.append("g")
-      .selectAll("rect")
-      .data(data)
-      .join("rect")
-        .attr("x", d => x(d.date) - 5)           
-        .attr("width", 10)                       
-        .attr("y", marginTop)
-        .attr("height", height - marginTop - marginBottom)
-        .attr("fill", "transparent")
-        .attr("pointer-events", "all")
-        .on("mouseover", function(event, d) {
-          tooltip
-            .style("opacity", 1)
-            .html(`<strong>Date:</strong> ${d.date.toLocaleDateString()}<br>
-                   <strong>Close:</strong> $${d.close.toFixed(2)}<br>
-                   <strong>High:</strong> $${d.high.toFixed(2)}<br>
-                   <strong>Low:</strong> $${d.low.toFixed(2)}<br>
-                   <strong>Open:</strong> $${d.open.toFixed(2)}<br>
-                   <strong>Volume:</strong> ${d.volume}<br>`)
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 28) + "px");
-          hoverLine
-            .attr("x1", x(d.date))
-            .attr("x2", x(d.date))
-            .style("visibility", "visible");
-        })
-      .on("mouseout", function() {
-        tooltip.style("opacity", 0);
-        hoverLine.style("visibility", "hidden");
-        });
 
-    let lineData = [];
-    let i = 0;
-    
-    const path = svg.append("path")
-      .datum(lineData)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 2);
-        
-    const interval = d3.interval(() => {
-      if (i >= data.length) {
-        interval.stop();
-        return;
-      }
-    
-      // Add next point and redraw path
-      lineData.push(data[i]);
-      path.datum(lineData).attr("d", line);
-    
-      // Get current point
-      const currentPoint = data[i];
-      const cx = x(currentPoint.date);
-      const cy = y(currentPoint.volume);
-    
-      i++;
-    }, 5); // delay in ms
+        // Line Path
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 2)
+          .attr("d", line);
 
-    document.getElementById("chart").appendChild(svg.node());
-  }
-</script>
-  
+        // Hover Line
+        const hoverLine = svg.append("line")
+          .attr("stroke", "black")
+          .attr("stroke-width", 1)
+          .attr("y1", marginTop)
+          .attr("y2", height - marginBottom)
+          .style("opacity", 0);
+
+        // Hover Tooltip Group
+        const tooltip = svg.append("g")
+          .style("display", "none");
+
+        tooltip.append("circle")
+          .attr("r", 4)
+          .attr("fill", "red");
+
+        const tooltipText = tooltip.append("text")
+          .attr("x", 9)
+          .attr("dy", "-0.4em")
+          .style("font-size", "10px");
+
+        // Overlay for interaction
+        svg.append("rect")
+          .attr("fill", "none")
+          .attr("pointer-events", "all")
+          .attr("width", width)
+          .attr("height", height)
+          .on("mouseover", () => {
+            hoverLine.style("opacity", 1);
+            tooltip.style("display", null);
+          })
+          .on("mouseout", () => {
+            hoverLine.style("opacity", 0);
+            tooltip.style("display", "none");
+          })
+          .on("mousemove", function() {
+            const [mx] = d3.mouse(this);
+            const bisectDate = d3.bisector(d => d.date).left;
+            const date = x.invert(mx);
+            const index = bisectDate(data, date, 1);
+            const a = data[index - 1];
+            const b = data[index];
+            const d = date - a.date > b.date - date ? b : a;
+
+            hoverLine.attr("x1", x(d.date)).attr("x2", x(d.date));
+            tooltip.attr("transform", `translate(${x(d.date)},${y(d.close)})`);
+            tooltipText.text(`$${d.close.toFixed(2)}`);
+          });
+
+        // Example Annotation
+        const keyDate = new Date("2012-10-26");
+        const point = data.find(d => d.date.getTime() === keyDate.getTime());
+
+        if (point) {
+          const annotations = [
+            {
+              note: {
+                title: "Windows 8 Launch",
+                label: `Closing Price: $${point.close.toFixed(2)}`
+              },
+              x: x(point.date),
+              y: y(point.close),
+              dx: 30,
+              dy: -40
+            }
+          ];
+
+          const makeAnnotations = d3.annotation()
+            .type(d3.annotationLabel)
+            .annotations(annotations);
+
+          svg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations);
+        }
+      });
+    }
+  </script>
 </body>
 </html>
