@@ -211,7 +211,21 @@ body {
 
     d3.selectAll(".annotation")
       .each(function (d) {
-        const note = d3.select(this).select(".annotation-note text");
+        const noteGroup = d3.select(this).select(".annotation-note");
+        const existingText = noteGroup.select("text");
+        
+        if (!existingText.empty()) {
+          const lines = d.note.label.split("\n");
+          existingText.selectAll("*").remove(); // Clear default
+        
+          lines.forEach((line, i) => {
+            existingText
+              .append("tspan")
+              .attr("x", 0)
+              .attr("dy", i === 0 ? "1em" : "1.2em")
+              .text(line);
+          });
+        }
         const lines = d.note.label.split("\n");
     
         note.selectAll("*").remove(); // Clear default
