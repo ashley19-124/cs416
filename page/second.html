@@ -204,15 +204,6 @@ body {
         hoverLine.style("visibility", "hidden");
         });
 
-    //annotations
-    const makeAnnotations = d3.annotation()
-      .type(d3.annotationLabel)
-      .annotations(annotations)
-    
-    svg.append("g")
-      .attr("class", "annotation-group")
-      .call(makeAnnotations)
-
     // plotting line 
     let lineData = [];
     let i = 0;
@@ -241,6 +232,15 @@ body {
       i++;
     }, 5); // delay in ms
 
+    //annotations
+    const makeAnnotations = d3.annotation()
+      .type(d3.annotationLabel)
+      .annotations(annotations)
+    
+    svg.append("g")
+      .attr("class", "annotation-group")
+      .call(makeAnnotations)
+    
     document.getElementById("chart").appendChild(svg.node());
   }
 </script>
