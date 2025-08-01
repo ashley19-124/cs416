@@ -212,15 +212,20 @@ body {
     d3.selectAll(".annotation")
       .each(function (d) {
         const noteGroup = d3.select(this).select(".annotation-note");
-        const existingText = noteGroup.select("text");
+        const originalText = noteGroup.select("text");
     
-        if (!existingText.empty()) {
-          const lines = d.note.label.split("\n");
-          existingText.selectAll("*").remove(); // Clear default
+        if (!originalText.empty()) {
+          const labelLines = d.note.label.split("\n");
     
-          lines.forEach((line, i) => {
-            existingText
-              .append("tspan")
+          // Remove original text
+          originalText.remove();
+    
+          // Create a new text element
+          const multiline = noteGroup.append("text")
+            .attr("class", "annotation-note-label");
+    
+          labelLines.forEach((line, i) => {
+            multiline.append("tspan")
               .attr("x", 0)
               .attr("dy", i === 0 ? "1em" : "1.2em")
               .text(line);
