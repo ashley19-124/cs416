@@ -211,33 +211,6 @@ body {
     svg.append("g")
       .attr("class", "annotation-group")
       .call(makeAnnotations)
-    
-    let lineData = [];
-    let i = 0;
-    
-    const path = svg.append("path")
-      .datum(lineData)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 2);
-        
-    const interval = d3.interval(() => {
-      if (i >= data.length) {
-        interval.stop();
-        return;
-      }
-    
-      // Add next point and redraw path
-      lineData.push(data[i]);
-      path.datum(lineData).attr("d", line);
-    
-      // Get current point
-      const currentPoint = data[i];
-      const cx = x(currentPoint.date);
-      const cy = y(currentPoint.volume);
-    
-      i++;
-    }, 5); // delay in ms
 
   }
 </script>
