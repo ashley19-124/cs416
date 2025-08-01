@@ -153,18 +153,42 @@
           });
 
         // Example Annotation
-        const keyDate = new Date("2012-10-26");
-        const point = data.find(d => d.date.getTime() === keyDate.getTime());
+        const dateA = new Date("1986-03-13");
+        const pointA = data.find(d => d.date.getTime() === dateA.getTime());
+        const dateB = new Date("1991-03-13");
+        const pointB = data.find(d => d.date.getTime() === dateB.getTime());
+        const dateC = new Date("1990-10-1");
+        const pointC = data.find(d => d.date.getTime() === dateC.getTime());
 
-        if (point) {
+        if (pointA) {
           const annotations = [
             {
               note: {
-                title: "Windows 8 Launch",
-                label: `Closing Price: $${point.close.toFixed(2)}`
+                title: "Microsoft IPO",
+                label: `Closing Price: $${pointA.close.toFixed(2)}`
               },
-              x: x(point.date),
-              y: y(point.close),
+              x: x(pointA.date),
+              y: y(pointA.close),
+              dx: 30,
+              dy: -40
+            },
+            {
+              note: {
+                title: "FTC launches investigation into possible collusion with IBM",
+                label: `Closing Price: $${pointB.close.toFixed(2)}`
+              },
+              x: x(pointB.date),
+              y: y(pointB.close),
+              dx: 30,
+              dy: -40
+            },
+            {
+              note: {
+                title: "Office Suite is released with Excel, Word, and PowerPoint",
+                label: `Closing Price: $${pointC.close.toFixed(2)}`
+              },
+              x: x(pointC.date),
+              y: y(pointC.close),
               dx: 30,
               dy: -40
             }
