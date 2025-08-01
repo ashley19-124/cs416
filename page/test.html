@@ -1,1 +1,136 @@
 
+<!DOCTYPE html>
+<html>
+  
+<head>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.center {
+  text-align: center;
+}
+.button {
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: auto;
+  transition-duration: 0.4s;
+}
+.button:disabled{
+  opacity: 0;
+}
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid steelblue;
+  opacity: 1;
+}
+.button1:hover:not(:disabled) {
+  background-color: steelblue;
+  opacity: 0.5;
+  color: white;
+}
+</style>
+
+<title>Main Page</title>
+  
+</head>
+  
+<body onload='init()'>
+<h1 style="text-align: center;">Microsoft (MSFT) Stock Price History</h1>
+<p style="text-align: center;">
+  <i>1986 to 2007: Windows OS and Office to Windows XP and Xbox</i>
+</p>
+  
+<div class="center">
+  <a href="https://ashley19-124.github.io/cs416/page/first.html" class="button button1">Back</a>
+  <a href="https://ashley19-124.github.io/cs416/page/third.html" class="button button1">Next</a>
+</div>
+
+<div id="tooltip" style="
+  position: absolute;
+  opacity: 0;
+  background: white;
+  border: 1px solid gray;
+  padding: 8px;
+  font-size: 12px;
+  pointer-events: none;
+  border-radius: 4px;
+  z-index: 10;
+"></div>
+
+<div id="chart" style="text-align: center; margin-top: 20px;"></div>
+
+<script>
+  async function init(){
+    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%201986%20to%202007.csv", d=> ({
+      date: new Date(d.Date),
+      close: +d.Close,
+      high: +d.High,
+      low: +d.Low,
+      open: +d.Open,
+      volume: +d.Volume
+    }));
+
+    // Declare the chart dimensions and margins.
+    const width = 928;
+    const height = 500;
+    const marginTop = 20;
+    const marginRight = 30;
+    const marginBottom = 30;
+    const marginLeft = 40;
+    
+    // x axis scaling
+    const x = d3.scaleUtc()
+      .domain(d3.extent(data, d => d.date))
+      .range([marginLeft, width - marginRight]);
+  
+    // y axis scaling
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.close)])
+      .range([height - marginBottom, marginTop]);  
+    
+    // line generator
+    const line = d3.line()
+        .x(d => x(d.date))
+        .y(d => y(d.close));
+  
+    // svg canvas
+   const svg = d3.select("#chart").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+    // x axis
+    svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
+  
+    // y axis
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y).ticks(height / 40))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").clone()
+            .attr("x2", width - marginLeft - marginRight)
+            .attr("stroke-opacity", 0.1))
+        .call(g => g.append("text")
+            .attr("x", -marginLeft)
+            .attr("y", 10)
+            .attr("fill", "currentColor")
+            .attr("text-anchor", "start")
+            .text("↑ Daily close ($)"));
+
+  }
+</script>
+  
+</body>
+</html>
