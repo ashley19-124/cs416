@@ -46,6 +46,9 @@ body {
   display: block;
   dominant-baseline: hanging;
 }
+.annotation-note-title {
+  font-weight: bold;
+}
 </style>
 
 <title>Main Page</title>
@@ -136,7 +139,11 @@ body {
     const annotations = [
       {
         note: {
-          label: "Microsoft Initial Public Offering, 03-13-86"
+          title: "03-13-86, Microsoft IPO",
+          label: `Closing Price: $${pointa.close.toFixed(2)}`
+        },
+        connector: {
+          end: "arrow"
         },
         x: x(pointa.date),
         y: y(pointa.close),
@@ -197,11 +204,12 @@ body {
         });
 
     //annotations
-    const makeAnnotations = d3.annotation().annotations(annotations);
+    const makeAnnotations = d3.annotation().type(d3.annotationLabel).annotations(annotations)
     
-    svg.append("g")
+    d3.select("svg")
+      .append("g")
       .attr("class", "annotation-group")
-      .call(makeAnnotations);
+      .call(makeAnnotations)
     
     let lineData = [];
     let i = 0;
