@@ -176,6 +176,7 @@
         const dateE = new Date("2000-01-13");
         const dateF = new Date("2001-11-15");
         const dateG = new Date("2007-01-30");
+        const dateH = new Date("1999-03-18");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
@@ -184,6 +185,7 @@
         const pointE = findClosestDate(data, dateE);
         const pointF = findClosestDate(data, dateF);
         const pointG = findClosestDate(data, dateG);
+        const pointH = findClosestDate(data, dateH);
 
         const annotations = [
           {
@@ -253,6 +255,16 @@
             },
             x: x(pointG.date),
             y: y(pointG.close),
+            dx: 10,
+            dy: -40
+          },
+          }
+            note: {
+              title: "Internet Explorer 5.0 is introduced",
+              label: `Closing Price: $${pointH.close.toFixed(2)}`
+            },
+            x: x(pointH.date),
+            y: y(pointH.close),
             dx: 30,
             dy: -40
           }
