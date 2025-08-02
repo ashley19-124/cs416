@@ -175,6 +175,7 @@
         const dateD = new Date("1995-08-24");
         const dateE = new Date("2000-01-13");
         const dateF = new Date("2001-11-15");
+        const dateG = new Date("2007-01-30");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
@@ -182,6 +183,7 @@
         const pointD = findClosestDate(data, dateD);
         const pointE = findClosestDate(data, dateE);
         const pointF = findClosestDate(data, dateF);
+        const pointG = findClosestDate(data, dateG);
 
         const annotations = [
           {
@@ -241,6 +243,16 @@
             },
             x: x(pointF.date),
             y: y(pointF.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Windows Vista is released",
+              label: `Closing Price: $${pointG.close.toFixed(2)}`
+            },
+            x: x(pointG.date),
+            y: y(pointG.close),
             dx: 30,
             dy: -40
           }
