@@ -158,13 +158,20 @@
             tooltipText.text(`$${d.close.toFixed(2)}`);
           });
 
-        // Example Annotation
+        // create annotations
+        function findClosestDate(data, targetDate) {
+          return data.reduce((a, b) =>
+            Math.abs(b.date - targetDate) < Math.abs(a.date - targetDate) ? b : a
+          );
+        }
+        
         const dateA = new Date("1986-03-13");
-        const pointA = data.find(d => d.date.getTime() === dateA.getTime());
         const dateB = new Date("1991-03-13");
-        const pointB = data.find(d => d.date.getTime() === dateB.getTime());
         const dateC = new Date("1990-10-1");
-        const pointC = data.find(d => d.date.getTime() === dateC.getTime());
+
+        const pointA = findClosestDate(data, dateA);
+        const pointB = findClosestDate(data, dateB);
+        const pointC = findClosestDate(data, dateC);
 
         const annotations = [
           {
