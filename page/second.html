@@ -172,10 +172,16 @@
         const dateA = new Date("1986-03-13");
         const dateB = new Date("1991-03-13");
         const dateC = new Date("1990-10-1");
+        const dateD = new Date("1995-08-24");
+        const dateE = new Date("2000-01-13");
+        const dateF = new Date("2001-11-15");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
         const pointC = findClosestDate(data, dateC);
+        const pointD = findClosestDate(data, dateD);
+        const pointE = findClosestDate(data, dateE);
+        const pointF = findClosesetDate(data, dateF);
 
         const annotations = [
           {
@@ -186,7 +192,7 @@
             x: x(pointA.date),
             y: y(pointA.close),
             dx: 30,
-            dy: -40
+            dy: -20
           },
           {
             note: {
@@ -207,6 +213,36 @@
             y: y(pointC.close),
             dx: 50,
             dy: -60
+          },
+          {
+            note: {
+              title: "Windows 95 is released to the public",
+              label: `Closing Price: $${pointD.close.toFixed(2)}`
+            },
+            x: x(pointD.date),
+            y: y(pointD.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Gates passes CEO position to Steve Ballmer",
+              label: `Closing Price: $${pointE.close.toFixed(2)}`
+            },
+            x: x(pointE.date),
+            y: y(pointE.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft enters the video game industry with Xbox",
+              label: `Closing Price: $${pointF.close.toFixed(2)}`
+            },
+            x: x(pointF.date),
+            y: y(pointF.close),
+            dx: 30,
+            dy: -40
           }
         ];
 
