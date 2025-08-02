@@ -181,7 +181,7 @@
         const pointC = findClosestDate(data, dateC);
         const pointD = findClosestDate(data, dateD);
         const pointE = findClosestDate(data, dateE);
-        const pointF = findClosesetDate(data, dateF);
+        const pointF = findClosestDate(data, dateF);
 
         const annotations = [
           {
@@ -213,6 +213,36 @@
             y: y(pointC.close),
             dx: 50,
             dy: -60
+          },
+                    {
+            note: {
+              title: "Windows 95 is released to the public",
+              label: `Closing Price: $${pointD.close.toFixed(2)}`
+            },
+            x: x(pointD.date),
+            y: y(pointD.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft is labeled a monopoly in United States v. Microsoft Corp.",
+              label: `Closing Price: $${pointE.close.toFixed(2)}`
+            },
+            x: x(pointE.date),
+            y: y(pointE.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "The original Xbox releases in North America",
+              label: `Closing Price: $${pointF.close.toFixed(2)}`
+            },
+            x: x(pointF.date),
+            y: y(pointF.close),
+            dx: 30,
+            dy: -40
           }
         ];
 
