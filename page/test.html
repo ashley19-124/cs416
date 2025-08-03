@@ -136,8 +136,76 @@ body {
       // y-axis
       svg.append("g")
         .attr("transform", `translate(${marginLeft},0)`)
-        .call(d3.axisLeft(y).ticks(hei
+        .call(d3.axisLeft(y).ticks(height / 40))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").clone()
+          .attr("x2", width - marginLeft - marginRight)
+          .attr("stroke-opacity", 0.1))
+        .call(g => g.append("text")
+          .attr("x", -marginLeft)
+          .attr("y", 10)
+          .attr("fill", "currentColor")
+          .attr("text-anchor", "start")
+          .text("↑ Daily close ($)"));
 
+      // interactive hover area
+      svg.append("g")
+        .selectAll("rect")
+        .data(filteredData)
+        .join("rect")
+        .attr("x", d => x(d.date) - 5)
+        .attr("width", 10)
+        .attr("y", marginTop)
+        .attr("height", height - marginTop - marginBottom)
+        .attr("fill", "transparent")
+        .attr("pointer-events", "all")
+        .on("mouseover", function(event, d) {
+          tooltip
+            .style("opacity", 1)
+            .html(`<strong>Date:</strong> ${d.date.toLocaleDateString()}<br>
+                   <strong>Close:</strong> $${d.close.toFixed(2)}<br>
+                   <strong>High:</strong> $${d.high.toFixed(2)}<br>
+                   <strong>Low:</strong> $${d.low.toFixed(2)}<br>
+                   <strong>Open:</strong> $${d.open.toFixed(2)}<br>
+                   <strong>Volume:</strong> ${d.volume}<br>`)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 28) + "px");
+          hoverLine
+            .attr("x1", x(d.date))
+            .attr("x2", x(d.date))
+            .style("visibility", "visible");
+        })
+        .on("mouseout", function() {
+          tooltip.style("opacity", 0);
+          hoverLine.style("visibility", "hidden");
+        });
+
+      svg.append("path")
+        .datum(filteredData)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+      document.getElementById("chart").appendChild(svg.node());
+    }
+
+    // Filter handler
+    document.getElementById("decade-select").addEventListener("change", (event) => {
+      const value = event.target.value;
+      let filtered = data;
+
+      if (value !== "all") {
+        const [start, end] = value.split("-").map(Number);
+        filtered = data.filter(d => d.date.getFullYear() >= start && d.date.getFullYear() <= end);
+      }
+
+      renderChart(filtered);
+    });
+
+    renderChart(data); // initial render
+  }
+</script>
   
 </body>
 </html>
