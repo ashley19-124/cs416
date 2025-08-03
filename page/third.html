@@ -174,11 +174,14 @@
         const dateC = new Date("2009-10-22");
         const dateD = new Date("2011-03-23");
         const dateE = new Date("2012-10-26");
+        const dateF = new Date("2013-07-19");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
         const pointC = findClosestDate(data, dateC);
         const pointD = findClosestDate(data, dateD);
+        const pointE = findClosestDate(data, dateE);
+        const pointF = findClosestDate(data, dateF);
 
         const annotations = [
           {
@@ -228,6 +231,16 @@
             },
             x: x(pointE.date),
             y: y(pointE.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft experiences its largest one day sell-off since 2000",
+              label: `Closing Price: $${pointF.close.toFixed(2)}`
+            },
+            x: x(pointF.date),
+            y: y(pointF.close),
             dx: 30,
             dy: -40
           },
