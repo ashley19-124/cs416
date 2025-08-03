@@ -1,123 +1,287 @@
 <!DOCTYPE html>
 <html>
-  
 <head>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-.center {
-  text-align: center;
-}
-.button {
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  margin: auto;
-  transition-duration: 0.4s;
-}
-.button:disabled{
-  opacity: 0;
-}
-.button1 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid steelblue;
-  opacity: 1;
-}
-.button1:hover:not(:disabled) {
-  background-color: steelblue;
-  opacity: 0.5;
-  color: white;
-}
-table, th, td {
-  border: 1px solid white;
-  border-collapse: collapse;
-}
-</style>
-
-<title>Main Page</title>
-  
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .center {
+      text-align: center;
+    }
+    .button {
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      font-size: 12px;
+      margin: auto;
+      transition-duration: 0.4s;
+    }
+    .button1 {
+      background-color: white; 
+      color: black; 
+      border: 2px solid steelblue;
+    }
+    .button1:hover:not(:disabled) {
+      background-color: steelblue;
+      opacity: 0.5;
+      color: white;
+    }
+    .annotation path {
+      stroke: black;
+    }
+    .annotation-note-title {
+      font-weight: bold;
+      font-size: 10px;
+    }
+    .annotation-note-label {
+      font-size: 8px;
+    }
+  </style>
+  <title>1986-2007</title>
 </head>
-  
-<body>
-<h1 style="text-align: center;">Microsoft (MSFT) Stock Price History</h1>
-<p style="text-align: center;">
-  <i>daily market closing price data from 
-    <a href="https://www.kaggle.com/datasets/taimoor888/microsoft-stock-price-data-19862024">
-      Yahoo! Finance</a>
-  </i>
-</p>
-  
-<div class="center">
-  <a href="https://ashley19-124.github.io/cs416/page/second.html" class="button button1">Begin</a>
-</div>
 
-<div id="bio" style="text-align: center; margin-top: 20px;">
-  <h2>The Microsoft Corporation</h2>
-  <p>Sources:
-    <a href="https://en.wikipedia.org/wiki/Microsoft">1</a>
-    <a href="https://en.wikipedia.org/wiki/Bill_Gates">2</a>
-    <a href="https://en.wikipedia.org/wiki/Paul_Allen">3</a>
-  </p>
-  <p>
-    Founded in 1975 by Bill Gates and Paul Allen in 1975, Microsoft was created to develop and sell BASIC interpreters for the Altair 8800, 
-    a microcomputer created in 1974. Currently, it is multinational corporation that is ubiquitous in the tech world. It is known for its
-    variety of iconic products from software to hardware, including the Windows OS, Microsoft Office Suite, Edge web browser, Xbox, and
-    much more.
-  </p>
-  <p></p>
-  <p>
-    From its initial public offering (IPO) in 1986, Microsoft's share price has increased from just $0.06 to almost $360 in April 2025. However,
-    this journey was in no way smooth; from scandals with the US government to poor business decisions, Microsoft has had its fair share of
-    difficulty. Despite that, it has remained a staple of the modern tech scene and will continue to be for years to come.
-  </p>
-  <p></p>
-</div>
+<body onload="init()">
+  <h1 style="text-align: center;">Microsoft (MSFT) Stock Price History</h1>
+  <p style="text-align: center;"><i>1986 to 2007: Windows OS and Office to Windows XP and Xbox</i></p>
+  <div class="center">
+    <a href="first.html" class="button button1">Back</a>
+    <a href="third.html" class="button button1">Next</a>
+  </div>
 
-<div style="text-align: center; margin-top: 20px;">
-  <h3>The Founders and Their Impacts</h3>
-  <p> </p>
-  <table style="width:100%" border="1">
-  <tr>
-    <th>Bill Gates</th>
-    <th style="width: 150px">&nbsp;</th>
-    <th>Paul Allen</th> 
-  </tr>
-  <tr>
-    <td><img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Visit_of_Bill_Gates_to_the_European_Commission_-_P062021-203496.jpg" 
-          alt="bill gates eu commission"
-          style="width:192px;height:240px;"></td>
-    <td>&nbsp;</td>
-    <td><img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Paul_G._Allen_%28cropped%29.jpg" alt="paul allen"
-          style="width:192px;height:240px;"></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>
-      After co-founding the company in 1975, Gates served as its CEO for the first 25 years. During his time as CEO, he also became president 
-      and chairman of the board when the company was incorporated in 1981. After stepping down as CEO, he took on the role of chief software 
-      architect and stayed in it until 2008. He then stepped down as chairman of the board in 2014 and completely resigned from the board in
-      2020. Currently, he serves as a technology adviser to the current CEO and other high-ranking leaders at Microsoft.
-    </td>
-    <td>&nbsp;</td>
-    <td>
-      Paul Allen is credited with creating the name "Microsoft", which comes from the combination of the words "microcomputer" and "software".
-      When Gates became Microsoft's president and chairman of the board in 1981, Allen became the executive vice president and vice chairman.
-      Allen left Microsoft in 1982 after being diagonsed with Hodgkin's lymphoma but remained on the board of directors until 2000. He passed
-      away in 2018 due to complications with cancer.
-    </td>
-  </tr>
-</div> 
+  <div id="chart" style="text-align: center; margin-top: 20px;"></div>
+
+  <script>
+    function init() {
+      d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%201986%20to%202007.csv", function(d) {
+        return {
+          date: new Date(d.Date),
+          close: +d.Close,
+          high: +d.High,
+          low: +d.Low,
+          open: +d.Open,
+          volume: +d.Volume
+        };
+      }, function(error, data) {
+        if (error) throw error;
+
+        const width = 928, height = 500;
+        const marginTop = 20, marginRight = 30, marginBottom = 30, marginLeft = 40;
+
+        const x = d3.scaleTime()
+          .domain(d3.extent(data, d => d.date))
+          .range([marginLeft, width - marginRight]);
+
+        const y = d3.scaleLinear()
+          .domain([0, d3.max(data, d => d.close)]).nice()
+          .range([height - marginBottom, marginTop]);
+
+        const line = d3.line()
+          .x(d => x(d.date))
+          .y(d => y(d.close));
+
+        const svg = d3.select("#chart").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+        // X Axis
+        svg.append("g")
+          .attr("transform", `translate(0,${height - marginBottom})`)
+          .call(d3.axisBottom(x).ticks(width / 80));
+
+        // Y Axis
+        svg.append("g")
+          .attr("transform", `translate(${marginLeft},0)`)
+          .call(d3.axisLeft(y))
+          .call(g => g.select(".domain").remove())
+          .call(g => g.selectAll(".tick line").clone()
+            .attr("x2", width - marginLeft - marginRight)
+            .attr("stroke-opacity", 0.1))
+          .call(g => g.append("text")
+            .attr("x", -marginLeft)
+            .attr("y", 10)
+            .attr("fill", "currentColor")
+            .attr("text-anchor", "start")
+            .text("↑ Daily close ($)"));
+
+        // Line Path
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 2)
+          .attr("d", line);
+
+        // Hover Line
+        const hoverLine = svg.append("line")
+          .attr("stroke", "black")
+          .attr("stroke-width", 1)
+          .attr("y1", marginTop)
+          .attr("y2", height - marginBottom)
+          .style("opacity", 0);
+
+        // Hover Tooltip Group
+        const tooltip = svg.append("g")
+          .style("display", "none");
+
+        tooltip.append("circle")
+          .attr("r", 4)
+          .attr("fill", "red");
+
+        const tooltipText = tooltip.append("text")
+          .attr("x", 9)
+          .attr("dy", "-0.4em")
+          .style("font-size", "10px");
+
+        // Overlay for interaction
+        svg.append("rect")
+          .attr("fill", "none")
+          .attr("pointer-events", "all")
+          .attr("width", width)
+          .attr("height", height)
+          .on("mouseover", () => {
+            hoverLine.style("opacity", 1);
+            tooltip.style("display", null);
+          })
+          .on("mouseout", () => {
+            hoverLine.style("opacity", 0);
+            tooltip.style("display", "none");
+          })
+          .on("mousemove", function() {
+            const [mx] = d3.mouse(this);
+            const bisectDate = d3.bisector(d => d.date).left;
+            const date = x.invert(mx);
+            const index = bisectDate(data, date, 1);
+            const a = data[index - 1];
+            const b = data[index];
+            const d = date - a.date > b.date - date ? b : a;
+
+            hoverLine.attr("x1", x(d.date)).attr("x2", x(d.date));
+            tooltip.attr("transform", `translate(${x(d.date)},${y(d.close)})`);
+            tooltipText.text(`$${d.close.toFixed(2)}`);
+          });
+
+        // create annotations
+        function findClosestDate(data, targetDate) {
+          return data.reduce((a, b) =>
+            Math.abs(b.date - targetDate) < Math.abs(a.date - targetDate) ? b : a
+          );
+        }
+        
+        const dateA = new Date("1986-03-13");
+        const dateB = new Date("1991-03-13");
+        const dateC = new Date("1990-10-1");
+        const dateD = new Date("1995-08-24");
+        const dateE = new Date("2000-01-13");
+        const dateF = new Date("2001-11-15");
+        const dateG = new Date("2007-01-30");
+        const dateH = new Date("1999-03-18");
+
+        const pointA = findClosestDate(data, dateA);
+        const pointB = findClosestDate(data, dateB);
+        const pointC = findClosestDate(data, dateC);
+        const pointD = findClosestDate(data, dateD);
+        const pointE = findClosestDate(data, dateE);
+        const pointF = findClosestDate(data, dateF);
+        const pointG = findClosestDate(data, dateG);
+        const pointH = findClosestDate(data, dateH);
+
+        const annotations = [
+          {
+            note: {
+              title: "Microsoft IPO",
+              label: `Closing Price: $${pointA.close.toFixed(2)}`
+            },
+            x: x(pointA.date),
+            y: y(pointA.close),
+            dx: 30,
+            dy: -20
+          },
+          {
+            note: {
+              title: "FTC launches investigation into possible collusion with IBM",
+              label: `Closing Price: $${pointB.close.toFixed(2)}`
+            },
+            x: x(pointB.date),
+            y: y(pointB.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Office Suite is released with Excel, Word, and PowerPoint",
+              label: `Closing Price: $${pointC.close.toFixed(2)}`
+            },
+            x: x(pointC.date),
+            y: y(pointC.close),
+            dx: 50,
+            dy: -60
+          },
+                    {
+            note: {
+              title: "Windows 95 is released to the public",
+              label: `Closing Price: $${pointD.close.toFixed(2)}`
+            },
+            x: x(pointD.date),
+            y: y(pointD.close),
+            dx: 0,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft is labeled a monopoly in United States v. Microsoft Corp.",
+              label: `Closing Price: $${pointE.close.toFixed(2)}`
+            },
+            x: x(pointE.date),
+            y: y(pointE.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "The original Xbox releases in North America",
+              label: `Closing Price: $${pointF.close.toFixed(2)}`
+            },
+            x: x(pointF.date),
+            y: y(pointF.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Windows Vista is released",
+              label: `Closing Price: $${pointG.close.toFixed(2)}`
+            },
+            x: x(pointG.date),
+            y: y(pointG.close),
+            dx: -20,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Internet Explorer 5.0 is introduced",
+              label: `Closing Price: $${pointH.close.toFixed(2)}`,
+              wrap: 100
+            },
+            x: x(pointH.date),
+            y: y(pointH.close),
+            dx: -70,
+            dy: 40
+          }
+        ];
+
+        const makeAnnotations = d3.annotation()
+          .type(d3.annotationLabel)
+          .annotations(annotations);
+
+        svg.append("g")
+          .attr("class", "annotation-group")
+          .call(makeAnnotations);
+      });
+    }
+  </script>
 </body>
 </html>
+
 
