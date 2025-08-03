@@ -183,43 +183,44 @@ body {
 
   document.getElementById("chart").appendChild(svg.node());
 }
+document.getElementById("decade-select").addEventListener("change", updateChart);
+document.getElementById("sort-select").addEventListener("change", updateChart);
 
-    // Filter handler
-    document.getElementById("decade-select").addEventListener("change", (event) => {
-      const value = event.target.value;
-      let filtered = data;
+function updateChart() {
+  const decadeValue = document.getElementById("decade-select").value;
+  const sortValue = document.getElementById("sort-select").value;
 
-      if (value !== "all") {
-        const [start, end] = value.split("-").map(Number);
-        filtered = data.filter(d => d.date.getFullYear() >= start && d.date.getFullYear() <= end);
-      }
+  // Step 1: Filter
+  let filtered = data;
+  if (decadeValue !== "all") {
+    const [start, end] = decadeValue.split("-").map(Number);
+    filtered = data.filter(d => d.date.getFullYear() >= start && d.date.getFullYear() <= end);
+  }
 
-      renderChart(filtered);
-    });
+  // Step 2: Sort
+  const sorted = [...filtered];
+  const getOrder = (key, asc = false) => (a, b) =>
+    asc ? d3.ascending(a[key], b[key]) : d3.descending(a[key], b[key]);
 
-    renderChart(data); // initial render
-    document.getElementById("sort-select").addEventListener("change", (event) => {
-      const value = event.target.value;
-      const sorted = [...data]; // make a copy
-    
-      const getOrder = (key, asc = false) => (a, b) =>
-        asc ? d3.ascending(a[key], b[key]) : d3.descending(a[key], b[key]);
-    
-      if (value === "date") sorted.sort(getOrder("date", true));
-      else if (value === "date-desc") sorted.sort(getOrder("date"));
-      else if (value === "close") sorted.sort(getOrder("close"));
-      else if (value === "close-asc") sorted.sort(getOrder("close", true));
-      else if (value === "open") sorted.sort(getOrder("open"));
-      else if (value === "open-asc") sorted.sort(getOrder("open", true));
-      else if (value === "high") sorted.sort(getOrder("high"));
-      else if (value === "high-asc") sorted.sort(getOrder("high", true));
-      else if (value === "low") sorted.sort(getOrder("low"));
-      else if (value === "low-asc") sorted.sort(getOrder("low", true));
-      else if (value === "volume") sorted.sort(getOrder("volume"));
-      else if (value === "volume-asc") sorted.sort(getOrder("volume", true));
-    
-      renderChart(sorted);
-    });
+  if (sortValue === "date") sorted.sort(getOrder("date", true));
+  else if (sortValue === "date-desc") sorted.sort(getOrder("date"));
+  else if (sortValue === "close") sorted.sort(getOrder("close"));
+  else if (sortValue === "close-asc") sorted.sort(getOrder("close", true));
+  else if (sortValue === "open") sorted.sort(getOrder("open"));
+  else if (sortValue === "open-asc") sorted.sort(getOrder("open", true));
+  else if (sortValue === "high") sorted.sort(getOrder("high"));
+  else if (sortValue === "high-asc") sorted.sort(getOrder("high", true));
+  else if (sortValue === "low") sorted.sort(getOrder("low"));
+  else if (sortValue === "low-asc") sorted.sort(getOrder("low", true));
+  else if (sortValue === "volume") sorted.sort(getOrder("volume"));
+  else if (sortValue === "volume-asc") sorted.sort(getOrder("volume", true));
+
+  // Step 3: Render
+  renderChart(sorted);
+}
+
+  renderChart(data); // change to:
+  updateChart(); // initial render using both filter and sort
 
   }
 </script>
