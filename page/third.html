@@ -182,6 +182,7 @@
         const dateK = new Date("2018-10-26");
         const dateL = new Date("2018-11-28");
         const dateM = new Date("2020-03-11");
+        const dateN = new Date("2020-09-22");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
@@ -196,6 +197,7 @@
         const pointK = findClosestDate(data, dateK);
         const pointL = findClosestDate(data, dateL);
         const pointM = findClosestDate(data, dateM);
+        const pointN = findClosestDate(data, dateN);
 
         const annotations = [
           {
@@ -325,6 +327,16 @@
             },
             x: x(pointM.date),
             y: y(pointM.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft announces an exclusive license to OpenAI's GPT-3 AI language generator",
+              label: `Closing Price: $${pointN.close.toFixed(2)}`
+            },
+            x: x(pointN.date),
+            y: y(pointN.close),
             dx: 30,
             dy: -40
           }
