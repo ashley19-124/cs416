@@ -1,140 +1,215 @@
 <!DOCTYPE html>
 <html>
-  
+
 <head>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-.center {
-  text-align: center;
-}
-.button {
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  margin: auto;
-  transition-duration: 0.4s;
-}
-.button:disabled{
-  opacity: 0;
-}
-.button1 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid steelblue;
-  opacity: 1;
-}
-.button1:hover:not(:disabled) {
-  background-color: steelblue;
-  opacity: 0.5;
-  color: white;
-}
-</style>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-<title>Main Page</title>
-  
+    .center {
+      text-align: center;
+    }
+
+    .button {
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 12px;
+      margin: auto;
+      transition-duration: 0.4s;
+    }
+
+    .button:disabled {
+      opacity: 0;
+    }
+
+    .button1 {
+      background-color: white;
+      color: black;
+      border: 2px solid steelblue;
+      opacity: 1;
+    }
+
+    .button1:hover:not(:disabled) {
+      background-color: steelblue;
+      opacity: 0.5;
+      color: white;
+    }
+  </style>
+
+  <title>MSFT Stock Chart</title>
 </head>
-  
+
 <body onload='init()'>
-<h1 style="text-align: center;">Microsoft (MSFT) Stock Price History, 1986-2025</h1>
-<p style="text-align: center;">
-  <i>daily market closing price data from 
-    <a href="https://www.kaggle.com/datasets/taimoor888/microsoft-stock-price-data-19862024">
-      Yahoo! Finance</a>
-  </i>
-</p>
-  
-<div class="center">
-  <a href="https://ashley19-124.github.io/cs416/page/first.html" class="button button1">Start Over</a>
-</div>
+  <h1 style="text-align: center;">Microsoft (MSFT) Stock Price History, 1986–2025</h1>
+  <p style="text-align: center;">
+    <i>Daily closing price data from
+      <a href="https://www.kaggle.com/datasets/taimoor888/microsoft-stock-price-data-19862024">
+        Yahoo! Finance</a>
+    </i>
+  </p>
 
-<div id="tooltip" style="
-  position: absolute;
-  opacity: 0;
-  background: white;
-  border: 1px solid gray;
-  padding: 8px;
-  font-size: 12px;
-  pointer-events: none;
-  border-radius: 4px;
-  z-index: 10;
-"></div>
+  <div class="center">
+    <a href="https://ashley19-124.github.io/cs416/page/first.html" class="button button1">Start Over</a>
+  </div>
 
-<label for="startSlider">Start Date:</label>
-<input type="range" id="startSlider" min="0" max="100" value="0" step="1">
-<span id="startLabel"></span><br>
+  <div id="tooltip" style="
+    position: absolute;
+    opacity: 0;
+    background: white;
+    border: 1px solid gray;
+    padding: 8px;
+    font-size: 12px;
+    pointer-events: none;
+    border-radius: 4px;
+    z-index: 10;
+  "></div>
 
-<label for="endSlider">End Date:</label>
-<input type="range" id="endSlider" min="0" max="100" value="100" step="1">
-<span id="endLabel"></span>
+  <label for="startSlider">Start Date:</label>
+  <input type="range" id="startSlider" min="0" max="100" value="0" step="1">
+  <span id="startLabel"></span><br>
 
+  <label for="endSlider">End Date:</label>
+  <input type="range" id="endSlider" min="0" max="100" value="100" step="1">
+  <span id="endLabel"></span>
 
-<div id="chart" style="text-align: center; margin-top: 20px;"></div>
+  <div id="chart" style="text-align: center; margin-top: 20px;"></div>
 
-<script>
-let data = [];
-let sortedDates = [];
+  <script>
+    let data = [];
+    let sortedDates = [];
 
-async function init() {
-  data = await d3.csv("...csv", d => ({
-    date: new Date(d.Date),
-    close: +d.Close,
-    high: +d.High,
-    low: +d.Low,
-    open: +d.Open,
-    volume: +d.Volume
-  }));
+    async function init() {
+      data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d => ({
+        date: new Date(d.Date),
+        close: +d.Close,
+        high: +d.High,
+        low: +d.Low,
+        open: +d.Open,
+        volume: +d.Volume
+      }));
 
-  sortedDates = data.map(d => d.date).sort((a, b) => a - b);
+      sortedDates = data.map(d => d.date).sort((a, b) => a - b);
 
-  const startSlider = d3.select("#startSlider").attr("max", sortedDates.length - 1);
-  const endSlider = d3.select("#endSlider").attr("max", sortedDates.length - 1).property("value", sortedDates.length - 1);
+      const startSlider = d3.select("#startSlider").attr("max", sortedDates.length - 1);
+      const endSlider = d3.select("#endSlider").attr("max", sortedDates.length - 1).property("value", sortedDates.length - 1);
 
-  startSlider.on("input", handleSliderChange);
-  endSlider.on("input", handleSliderChange);
+      startSlider.on("input", handleSliderChange);
+      endSlider.on("input", handleSliderChange);
 
-  updateDateLabels();
-  updateChart();
-}
+      updateDateLabels();
+      updateChart();
+    }
 
-function handleSliderChange() {
-  const startIndex = +d3.select("#startSlider").property("value");
-  const endIndex = +d3.select("#endSlider").property("value");
+    function handleSliderChange() {
+      const startIndex = +d3.select("#startSlider").property("value");
+      const endIndex = +d3.select("#endSlider").property("value");
 
-  if (startIndex > endIndex) {
-    this.id === "startSlider"
-      ? d3.select("#startSlider").property("value", endIndex)
-      : d3.select("#endSlider").property("value", startIndex);
-  }
+      if (startIndex > endIndex) {
+        this.id === "startSlider"
+          ? d3.select("#startSlider").property("value", endIndex)
+          : d3.select("#endSlider").property("value", startIndex);
+      }
 
-  updateDateLabels();
-  updateChart();
-}
+      updateDateLabels();
+      updateChart();
+    }
 
-function updateDateLabels() {
-  const start = sortedDates[+d3.select("#startSlider").property("value")];
-  const end = sortedDates[+d3.select("#endSlider").property("value")];
-  d3.select("#startLabel").text(d3.timeFormat("%Y-%m-%d")(start));
-  d3.select("#endLabel").text(d3.timeFormat("%Y-%m-%d")(end));
-}
+    function updateDateLabels() {
+      const start = sortedDates[+d3.select("#startSlider").property("value")];
+      const end = sortedDates[+d3.select("#endSlider").property("value")];
+      d3.select("#startLabel").text(d3.timeFormat("%Y-%m-%d")(start));
+      d3.select("#endLabel").text(d3.timeFormat("%Y-%m-%d")(end));
+    }
 
-function updateChart() {
-  const startIndex = +d3.select("#startSlider").property("value");
-  const endIndex = +d3.select("#endSlider").property("value");
-  const startDate = sortedDates[startIndex];
-  const endDate = sortedDates[endIndex];
+    function updateChart() {
+      const startIndex = +d3.select("#startSlider").property("value");
+      const endIndex = +d3.select("#endSlider").property("value");
+      const startDate = sortedDates[startIndex];
+      const endDate = sortedDates[endIndex];
 
-  const filteredData = data.filter(d => d.date >= startDate && d.date <= endDate);
-  renderChart(filteredData);
-}
+      const filteredData = data.filter(d => d.date >= startDate && d.date <= endDate);
+      renderChart(filteredData);
+    }
 
-</script>
+    function renderChart(filteredData) {
+      d3.select("#chart").selectAll("*").remove(); // clear previous chart
 
+      const width = 928;
+      const height = 500;
+      const marginTop = 20;
+      const marginRight = 30;
+      const marginBottom = 30;
+      const marginLeft = 40;
+
+      const tooltip = d3.select("#tooltip");
+
+      const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto;");
+
+      const x = d3.scaleUtc()
+        .domain(d3.extent(filteredData, d => d.date))
+        .range([marginLeft, width - marginRight]);
+
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d.close)])
+        .nice()
+        .range([height - marginBottom, marginTop]);
+
+      svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
+
+      svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").clone()
+          .attr("x2", width - marginLeft - marginRight)
+          .attr("stroke-opacity", 0.1))
+        .call(g => g.append("text")
+          .attr("x", -marginLeft)
+          .attr("y", 10)
+          .attr("fill", "currentColor")
+          .attr("text-anchor", "start")
+          .text("↑ Daily Close ($)"));
+
+      svg.append("g")
+        .selectAll("circle")
+        .data(filteredData)
+        .join("circle")
+        .attr("cx", d => x(d.date))
+        .attr("cy", d => y(d.close))
+        .attr("r", 2.5)
+        .attr("fill", "steelblue")
+        .on("mouseover", function (event, d) {
+          tooltip
+            .style("opacity", 1)
+            .html(`
+              <strong>Date:</strong> ${d3.timeFormat("%Y-%m-%d")(d.date)}<br>
+              <strong>Close:</strong> $${d.close.toFixed(2)}<br>
+              <strong>High:</strong> $${d.high.toFixed(2)}<br>
+              <strong>Low:</strong> $${d.low.toFixed(2)}<br>
+              <strong>Open:</strong> $${d.open.toFixed(2)}<br>
+              <strong>Volume:</strong> ${d.volume.toLocaleString()}
+            `)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", () => tooltip.style("opacity", 0));
+
+      document.getElementById("chart").appendChild(svg.node());
+    }
+  </script>
 </body>
+
 </html>
+
