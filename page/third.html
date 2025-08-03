@@ -175,7 +175,6 @@
         const dateD = new Date("2011-03-23");
         const dateE = new Date("2012-10-26");
         const dateF = new Date("2013-07-19");
-        const dateG = new Date("2013-09-03");
         const dateH = new Date("2014-04-25");
         const dateI = new Date("2014-09-15");
         const dateJ = new Date("2017-06-08");
@@ -190,7 +189,6 @@
         const pointD = findClosestDate(data, dateD);
         const pointE = findClosestDate(data, dateE);
         const pointF = findClosestDate(data, dateF);
-        const pointG = findClosestDate(data, dateG);
         const pointH = findClosestDate(data, dateH);
         const pointI = findClosestDate(data, dateI);
         const pointJ = findClosestDate(data, dateJ);
@@ -259,16 +257,6 @@
             y: y(pointF.close),
             dx: -10,
             dy: -150
-          },
-          {
-            note: {
-              title: "Microsoft agrees to purchase Nokia's mobile unit",
-              label: `Closing Price: $${pointG.close.toFixed(2)}`
-            },
-            x: x(pointG.date),
-            y: y(pointG.close),
-            dx: 30,
-            dy: -40
           },
           {
             note: {
