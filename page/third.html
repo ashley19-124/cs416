@@ -181,6 +181,7 @@
         const dateJ = new Date("2017-06-08");
         const dateK = new Date("2018-10-26");
         const dateL = new Date("2018-11-28");
+        const dateM = new Date("2020-03-11");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
@@ -194,6 +195,7 @@
         const pointJ = findClosestDate(data, dateJ);
         const pointK = findClosestDate(data, dateK);
         const pointL = findClosestDate(data, dateL);
+        const pointM = findClosestDate(data, dateM);
 
         const annotations = [
           {
@@ -274,7 +276,7 @@
             x: x(pointH.date),
             y: y(pointH.close),
             dx: 0,
-            dy: -100
+            dy: -200
           },
           {
             note: {
@@ -313,6 +315,16 @@
             },
             x: x(pointL.date),
             y: y(pointL.close),
+            dx: 0,
+            dy: -40
+          },
+          {
+            note: {
+              title: "The WHO declares COVID-19 a pandemic",
+              label: `Closing Price: $${pointM.close.toFixed(2)}`
+            },
+            x: x(pointM.date),
+            y: y(pointM.close),
             dx: 30,
             dy: -40
           }
