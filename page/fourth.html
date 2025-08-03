@@ -1,320 +1,187 @@
 <!DOCTYPE html>
 <html>
+  
 <head>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    .center {
-      text-align: center;
-    }
-    .button {
-      border: none;
-      color: white;
-      padding: 8px 16px;
-      font-size: 12px;
-      margin: auto;
-      transition-duration: 0.4s;
-    }
-    .button1 {
-      background-color: white; 
-      color: black; 
-      border: 2px solid steelblue;
-    }
-    .button1:hover:not(:disabled) {
-      background-color: steelblue;
-      opacity: 0.5;
-      color: white;
-    }
-    .annotation path {
-      stroke: black;
-    }
-    .annotation-note-title {
-      font-weight: bold;
-      font-size: 10px;
-    }
-    .annotation-note-label {
-      font-size: 8px;
-    }
-  </style>
-  <title>2020-2025</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.center {
+  text-align: center;
+}
+.button {
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: auto;
+  transition-duration: 0.4s;
+}
+.button:disabled{
+  opacity: 0;
+}
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid steelblue;
+  opacity: 1;
+}
+.button1:hover:not(:disabled) {
+  background-color: steelblue;
+  opacity: 0.5;
+  color: white;
+}
+</style>
+
+<title>Main Page</title>
+  
 </head>
+  
+<body onload='init()'>
+<h1 style="text-align: center;">Microsoft (MSFT) Stock Price History, 1986-2025</h1>
+<p style="text-align: center;">
+  <i>daily market closing price data from 
+    <a href="https://www.kaggle.com/datasets/taimoor888/microsoft-stock-price-data-19862024">
+      Yahoo! Finance</a>
+  </i>
+</p>
+  
+<div class="center">
+  <a href="https://ashley19-124.github.io/cs416/page/first.html" class="button button1">Start Over</a>
+</div>
 
-<body onload="init()">
-  <h1 style="text-align: center;">Microsoft (MSFT) Stock Price History</h1>
-  <p style="text-align: center;"><i>2020 to present: Windows 11, acquisitions, and more</i></p>
-  <div class="center">
-    <a href="third.html" class="button button1">Back</a>
-    <a href="https://ashley19-124.github.io/cs416/index.html" class="button button1">Next</a>
-  </div>
+<div id="tooltip" style="
+  position: absolute;
+  opacity: 0;
+  background: white;
+  border: 1px solid gray;
+  padding: 8px;
+  font-size: 12px;
+  pointer-events: none;
+  border-radius: 4px;
+  z-index: 10;
+"></div>
 
-  <div id="chart" style="text-align: center; margin-top: 20px;"></div>
+<div id="chart" style="text-align: center; margin-top: 20px;"></div>
 
-  <script>
-    function init() {
-      d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%202020%20to%20present.csv", function(d) {
-        return {
-          date: new Date(d.Date),
-          close: +d.Close,
-          high: +d.High,
-          low: +d.Low,
-          open: +d.Open,
-          volume: +d.Volume
-        };
-      }, function(error, data) {
-        if (error) throw error;
+<script>
+  async function init(){
+    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d=> ({
+      date: new Date(d.Date),
+      close: +d.Close,
+      high: +d.High,
+      low: +d.Low,
+      open: +d.Open,
+      volume: +d.Volume
+    }));
 
-        const width = 928, height = 500;
-        const marginTop = 20, marginRight = 30, marginBottom = 30, marginLeft = 40;
+    // Declare the chart dimensions and margins.
+    const width = 928;
+    const height = 500;
+    const marginTop = 20;
+    const marginRight = 30;
+    const marginBottom = 30;
+    const marginLeft = 40;
+    
+    // x axis scaling
+    const x = d3.scaleUtc()
+      .domain(d3.extent(data, d => d.date))
+      .range([marginLeft, width - marginRight]);
+  
+    // y axis scaling
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.close)])
+      .range([height - marginBottom, marginTop]);  
+    
+    // line generator
+    const line = d3.line()
+        .x(d => x(d.date))
+        .y(d => y(d.close));
+  
+    // svg canvas
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+  
+    // indicator with tooltip 
+    const hoverLine = svg.append("line")
+      .attr("stroke", "gray")
+      .attr("stroke-width", 1)
+      .attr("y1", marginTop)
+      .attr("y2", height - marginBottom)
+      .style("visibility", "hidden");
+    
+    // tooltip div
+    const tooltip = d3.select("#tooltip");
 
-        const x = d3.scaleTime()
-          .domain(d3.extent(data, d => d.date))
-          .range([marginLeft, width - marginRight]);
-
-        const y = d3.scaleLinear()
-          .domain([0, d3.max(data, d => d.close)]).nice()
-          .range([height - marginBottom, marginTop]);
-
-        const line = d3.line()
-          .x(d => x(d.date))
-          .y(d => y(d.close));
-
-        const svg = d3.select("#chart").append("svg")
-          .attr("width", width)
-          .attr("height", height);
-
-        // X Axis
-        svg.append("g")
-          .attr("transform", `translate(0,${height - marginBottom})`)
-          .call(d3.axisBottom(x).ticks(width / 80));
-
-        // Y Axis
-        svg.append("g")
-          .attr("transform", `translate(${marginLeft},0)`)
-          .call(d3.axisLeft(y))
-          .call(g => g.select(".domain").remove())
-          .call(g => g.selectAll(".tick line").clone()
+    // x axis
+    svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
+  
+    // y axis
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y).ticks(height / 40))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").clone()
             .attr("x2", width - marginLeft - marginRight)
             .attr("stroke-opacity", 0.1))
-          .call(g => g.append("text")
+        .call(g => g.append("text")
             .attr("x", -marginLeft)
             .attr("y", 10)
             .attr("fill", "currentColor")
             .attr("text-anchor", "start")
             .text("↑ Daily close ($)"));
-
-        // Line Path
-        svg.append("path")
-          .datum(data)
-          .attr("fill", "none")
-          .attr("stroke", "steelblue")
-          .attr("stroke-width", 2)
-          .attr("d", line);
-
-        // Hover Line
-        const hoverLine = svg.append("line")
-          .attr("stroke", "black")
-          .attr("stroke-width", 1)
-          .attr("y1", marginTop)
-          .attr("y2", height - marginBottom)
-          .style("opacity", 0);
-
-        // Hover Tooltip Group
-        const tooltip = svg.append("g")
-          .style("display", "none");
-
-        tooltip.append("circle")
-          .attr("r", 4)
-          .attr("fill", "red");
-
-        const tooltipText = tooltip.append("text")
-          .attr("x", 9)
-          .attr("dy", "-0.4em")
-          .style("font-size", "10px");
-
-        // Overlay for interaction
-        svg.append("rect")
-          .attr("fill", "none")
-          .attr("pointer-events", "all")
-          .attr("width", width)
-          .attr("height", height)
-          .on("mouseover", () => {
-            hoverLine.style("opacity", 1);
-            tooltip.style("display", null);
-          })
-          .on("mouseout", () => {
-            hoverLine.style("opacity", 0);
-            tooltip.style("display", "none");
-          })
-          .on("mousemove", function() {
-            const [mx] = d3.mouse(this);
-            const bisectDate = d3.bisector(d => d.date).left;
-            const date = x.invert(mx);
-            const index = bisectDate(data, date, 1);
-            const a = data[index - 1];
-            const b = data[index];
-            const d = date - a.date > b.date - date ? b : a;
-
-            hoverLine.attr("x1", x(d.date)).attr("x2", x(d.date));
-            tooltip.attr("transform", `translate(${x(d.date)},${y(d.close)})`);
-            tooltipText.text(`$${d.close.toFixed(2)}`);
-          });
-
-        // create annotations
-        function findClosestDate(data, targetDate) {
-          return data.reduce((a, b) =>
-            Math.abs(b.date - targetDate) < Math.abs(a.date - targetDate) ? b : a
-          );
-        }
-        
-        const dateA = new Date("2020-03-11");
-        const dateB = new Date("2020-09-22");
-        const dateC = new Date("2022-03-04");
-        const dateD = new Date("2021-10-05");
-        const dateE = new Date("2021-09-10");
-        const dateF = new Date("2023-10-23");
-        const dateG = new Date("2023-06-21");
-        const dateH = new Date("2024-03-19");
-        const dateI = new Date("2024-07-19");
-        const dateJ = new Date("2024-09-19");
-        const dateK = new Date("2025-04-04");
-
-        const pointA = findClosestDate(data, dateA);
-        const pointB = findClosestDate(data, dateB);
-        const pointC = findClosestDate(data, dateC);
-        const pointD = findClosestDate(data, dateD);
-        const pointE = findClosestDate(data, dateE);
-        const pointF = findClosestDate(data, dateF);
-        const pointG = findClosestDate(data, dateG);
-        const pointH = findClosestDate(data, dateH);
-        const pointI = findClosestDate(data, dateI);
-        const pointJ = findClosestDate(data, dateJ);
-        const pointK = findClosestDate(data, dateK);
-
-        const annotations = [
-          {
-            note: {
-              title: "The WHO declares COVID-19 a pandemic",
-              label: `Closing Price: $${pointA.close.toFixed(2)}`
-            },
-            x: x(pointA.date),
-            y: y(pointA.close),
-            dx: 30,
-            dy: 70
-          },
-          {
-            note: {
-              title: "Microsoft announces an exclusive license to OpenAI's GPT-3 AI language generator",
-              label: `Closing Price: $${pointB.close.toFixed(2)}`
-            },
-            x: x(pointB.date),
-            y: y(pointB.close),
-            dx: 0,
-            dy: -40
-          },
-          {
-            note: {
-              title: "Microsoft acquires Nuance Communications for $16 billion",
-              label: `Closing Price: $${pointC.close.toFixed(2)}`
-            },
-            x: x(pointC.date),
-            y: y(pointC.close),
-            dx: 0,
-            dy: -80
-          },
-          {
-            note: {
-              title: "Windows 11 is released to the public",
-              label: `Closing Price: $${pointD.close.toFixed(2)}`
-            },
-            x: x(pointD.date),
-            y: y(pointD.close),
-            dx: 0,
-            dy: -40
-          },
-          {
-            note: {
-              title: "Microsoft acquires online learning startup TakeLessons",
-              label: `Closing Price: $${pointE.close.toFixed(2)}`
-            },
-            x: x(pointE.date),
-            y: y(pointE.close),
-            dx: 0,
-            dy: 60
-          },
-          {
-            note: {
-              title: "Microsoft acquires Activision Blizzard for $68.7 billion",
-              label: `Closing Price: $${pointF.close.toFixed(2)}`
-            },
-            x: x(pointF.date),
-            y: y(pointF.close),
-            dx: 0,
-            dy: 60
-          },
-          {
-            note: {
-              title: "Microsoft announces Azure Quantum Elements",
-              label: `Closing Price: $${pointG.close.toFixed(2)}`
-            },
-            x: x(pointG.date),
-            y: y(pointG.close),
-            dx: 0,
-            dy: -40
-          },
-          {
-            note: {
-              title: "Microsoft licenses Inflection's technology for $650 million",
-              label: `Closing Price: $${pointH.close.toFixed(2)}`
-            },
-            x: x(pointH.date),
-            y: y(pointH.close),
-            dx: -20,
-            dy: -40
-          },
-          {
-            note: {
-              title: "A global IT outage impacts Microsoft services worldwide",
-              label: `Closing Price: $${pointI.close.toFixed(2)}`
-            },
-            x: x(pointI.date),
-            y: y(pointI.close),
-            dx: -20,
-            dy: 200
-          },
-          {
-            note: {
-              title: "Microsoft teams up with BlackRock to fund the Global AI Infrastructure Investment Partnership",
-              label: `Closing Price: $${pointJ.close.toFixed(2)}`
-            },
-            x: x(pointJ.date),
-            y: y(pointJ.close),
-            dx: 30,
-            dy: 100
-          },
-          {
-            note: {
-              title: "Microsoft celebrates its 50th anniversary",
-              label: `Closing Price: $${pointK.close.toFixed(2)}`
-            },
-            x: x(pointK.date),
-            y: y(pointK.close),
-            dx: -30,
-            dy: -100
-          }
-        ];
-
-        const makeAnnotations = d3.annotation()
-          .type(d3.annotationLabel)
-          .annotations(annotations);
-
-        svg.append("g")
-          .attr("class", "annotation-group")
-          .call(makeAnnotations);
-      });
-    }
-  </script>
+    
+    svg.append("g")
+      .selectAll("rect")
+      .data(data)
+      .join("rect")
+        .attr("x", d => x(d.date) - 5)           
+        .attr("width", 10)                       
+        .attr("y", marginTop)
+        .attr("height", height - marginTop - marginBottom)
+        .attr("fill", "transparent")
+        .attr("pointer-events", "all")
+        .on("mouseover", function(event, d) {
+          tooltip
+            .style("opacity", 1)
+            .html(`<strong>Date:</strong> ${d.date.toLocaleDateString()}<br>
+                   <strong>Close:</strong> $${d.close.toFixed(2)}<br>
+                   <strong>High:</strong> $${d.high.toFixed(2)}<br>
+                   <strong>Low:</strong> $${d.low.toFixed(2)}<br>
+                   <strong>Open:</strong> $${d.open.toFixed(2)}<br>
+                   <strong>Volume:</strong> ${d.volume}<br>`)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 28) + "px");
+          hoverLine
+            .attr("x1", x(d.date))
+            .attr("x2", x(d.date))
+            .style("visibility", "visible");
+        })
+      .on("mouseout", function() {
+        tooltip.style("opacity", 0);
+        hoverLine.style("visibility", "hidden");
+        });
+    
+    // line path
+    svg.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("d", line(data));
+  
+    document.getElementById("chart").appendChild(svg.node());
+  }
+</script>
+  
 </body>
 </html>
+
