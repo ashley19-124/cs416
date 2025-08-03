@@ -66,6 +66,17 @@ body {
   z-index: 10;
 "></div>
 
+<div class="center" style="margin-top: 20px;">
+  <label for="decade-select"><strong>Select Time Period:</strong></label>
+  <select id="decade-select">
+    <option value="all">All</option>
+    <option value="1986-1995">1986–1995</option>
+    <option value="1996-2005">1996–2005</option>
+    <option value="2006-2015">2006–2015</option>
+    <option value="2016-2025">2016–2025</option>
+  </select>
+</div>
+
 <div id="chart" style="text-align: center; margin-top: 20px;"></div>
 
 <script>
@@ -77,7 +88,7 @@ body {
       low: +d.Low,
       open: +d.Open,
       volume: +d.Volume
-    }));
+    }))};
 
     // Declare the chart dimensions and margins.
     const width = 928;
