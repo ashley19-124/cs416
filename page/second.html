@@ -39,22 +39,22 @@
       font-size: 8px;
     }
   </style>
-  <title>1986-2007</title>
+  <title>2007-2020</title>
 </head>
 
 <body onload="init()">
   <h1 style="text-align: center;">Microsoft (MSFT) Stock Price History</h1>
-  <p style="text-align: center;"><i>1986 to 2007: Windows OS and Office to Windows XP and Xbox</i></p>
+  <p style="text-align: center;"><i>2007 to 2020: Windows 7 to Windows 10 and Microsoft Edge</i></p>
   <div class="center">
-    <a href="first.html" class="button button1">Back</a>
-    <a href="third.html" class="button button1">Next</a>
+    <a href="second.html" class="button button1">Back</a>
+    <a href="fourth.html" class="button button1">Next</a>
   </div>
 
   <div id="chart" style="text-align: center; margin-top: 20px;"></div>
 
   <script>
     function init() {
-      d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%201986%20to%202007.csv", function(d) {
+      d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/MSFT%202007%20to%202020.csv", function(d) {
         return {
           date: new Date(d.Date),
           close: +d.Close,
@@ -169,14 +169,19 @@
           );
         }
         
-        const dateA = new Date("1986-03-13");
-        const dateB = new Date("1991-03-13");
-        const dateC = new Date("1990-10-1");
-        const dateD = new Date("1995-08-24");
-        const dateE = new Date("2000-01-13");
-        const dateF = new Date("2001-11-15");
-        const dateG = new Date("2007-01-30");
-        const dateH = new Date("1999-03-18");
+        const dateA = new Date("2007-01-30");
+        const dateB = new Date("2008-10-27");
+        const dateC = new Date("2009-10-22");
+        const dateD = new Date("2011-03-23");
+        const dateE = new Date("2012-10-26");
+        const dateF = new Date("2013-07-19");
+        const dateH = new Date("2014-04-25");
+        const dateI = new Date("2014-09-15");
+        const dateJ = new Date("2017-06-08");
+        const dateK = new Date("2018-10-26");
+        const dateL = new Date("2018-11-28");
+        const dateM = new Date("2020-03-11");
+        const dateN = new Date("2020-09-22");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
@@ -184,23 +189,28 @@
         const pointD = findClosestDate(data, dateD);
         const pointE = findClosestDate(data, dateE);
         const pointF = findClosestDate(data, dateF);
-        const pointG = findClosestDate(data, dateG);
         const pointH = findClosestDate(data, dateH);
+        const pointI = findClosestDate(data, dateI);
+        const pointJ = findClosestDate(data, dateJ);
+        const pointK = findClosestDate(data, dateK);
+        const pointL = findClosestDate(data, dateL);
+        const pointM = findClosestDate(data, dateM);
+        const pointN = findClosestDate(data, dateN);
 
         const annotations = [
           {
             note: {
-              title: "Microsoft IPO",
+              title: "Windows Vista is released",
               label: `Closing Price: $${pointA.close.toFixed(2)}`
             },
             x: x(pointA.date),
             y: y(pointA.close),
             dx: 30,
-            dy: -20
+            dy: -40
           },
           {
             note: {
-              title: "FTC launches investigation into possible collusion with IBM",
+              title: "Azure Services Platform, a cloud computing service for Windows, is launched",
               label: `Closing Price: $${pointB.close.toFixed(2)}`
             },
             x: x(pointB.date),
@@ -210,64 +220,113 @@
           },
           {
             note: {
-              title: "Office Suite is released with Excel, Word, and PowerPoint",
+              title: "The first retail store opens in Scottsdale, AZ; Window 7 is released",
               label: `Closing Price: $${pointC.close.toFixed(2)}`
             },
             x: x(pointC.date),
             y: y(pointC.close),
             dx: 50,
-            dy: -60
+            dy: -100
           },
-                    {
+          {
             note: {
-              title: "Windows 95 is released to the public",
+              title: "Microsoft becomes a co-founder of the Open Networking Foundation",
               label: `Closing Price: $${pointD.close.toFixed(2)}`
             },
             x: x(pointD.date),
             y: y(pointD.close),
-            dx: 0,
+            dx: 30,
             dy: -40
           },
           {
             note: {
-              title: "Microsoft is labeled a monopoly in United States v. Microsoft Corp.",
+              title: "Microsoft 8 and the Surface are released",
               label: `Closing Price: $${pointE.close.toFixed(2)}`
             },
             x: x(pointE.date),
             y: y(pointE.close),
-            dx: 30,
-            dy: -40
+            dx: -20,
+            dy: -100
           },
           {
             note: {
-              title: "The original Xbox releases in North America",
+              title: "Microsoft experiences its largest one day sell-off since 2000",
               label: `Closing Price: $${pointF.close.toFixed(2)}`
             },
             x: x(pointF.date),
             y: y(pointF.close),
-            dx: 30,
-            dy: -40
+            dx: -10,
+            dy: -150
           },
           {
             note: {
-              title: "Windows Vista is released",
-              label: `Closing Price: $${pointG.close.toFixed(2)}`
-            },
-            x: x(pointG.date),
-            y: y(pointG.close),
-            dx: -20,
-            dy: -40
-          },
-          {
-            note: {
-              title: "Internet Explorer 5.0 is introduced",
-              label: `Closing Price: $${pointH.close.toFixed(2)}`,
-              wrap: 100
+              title: "Nokia Devices and Services is acquired for $7.2 billion",
+              label: `Closing Price: $${pointH.close.toFixed(2)}`
             },
             x: x(pointH.date),
             y: y(pointH.close),
-            dx: -70,
-            dy: 40
+            dx: 0,
+            dy: -200
+          },
+          {
+            note: {
+              title: "Mojang is acquired for $2.5 billion",
+              label: `Closing Price: $${pointI.close.toFixed(2)}`
+            },
+            x: x(pointI.date),
+            y: y(pointI.close),
+            dx: 50,
+            dy: -75
+          },
+          {
+            note: {
+              title: "Hexadite is acquired for $100 million",
+              label: `Closing Price: $${pointJ.close.toFixed(2)}`
+            },
+            x: x(pointJ.date),
+            y: y(pointJ.close),
+            dx: 0,
+            dy: -30
+          },
+          {
+            note: {
+              title: "GitHub is acquired for $7.5 billion",
+              label: `Closing Price: $${pointK.close.toFixed(2)}`
+            },
+            x: x(pointK.date),
+            y: y(pointK.close),
+            dx: -100,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft agrees to supply 100,000 HoloLens to the U.S. military",
+              label: `Closing Price: $${pointL.close.toFixed(2)}`
+            },
+            x: x(pointL.date),
+            y: y(pointL.close),
+            dx: 0,
+            dy: -80
+          },
+          {
+            note: {
+              title: "The WHO declares COVID-19 a pandemic",
+              label: `Closing Price: $${pointM.close.toFixed(2)}`
+            },
+            x: x(pointM.date),
+            y: y(pointM.close),
+            dx: 0,
+            dy: 150
+          },
+          {
+            note: {
+              title: "Microsoft announces an exclusive license to OpenAI's GPT-3 AI language generator",
+              label: `Closing Price: $${pointN.close.toFixed(2)}`
+            },
+            x: x(pointN.date),
+            y: y(pointN.close),
+            dx: 0,
+            dy: 150
           }
         ];
 
