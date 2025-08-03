@@ -170,8 +170,15 @@
         }
         
         const dateA = new Date("2007-01-30");
+        const dateB = new Date("2008-10-27");
+        const dateC = new Date("2009-10-22");
+        const dateD = new Date("2011-03-23");
+        const dateE = new Date("2012-10-26");
 
         const pointA = findClosestDate(data, dateA);
+        const pointB = findClosestDate(data, dateB);
+        const pointC = findClosestDate(data, dateC);
+        const pointD = findClosestDate(data, dateD);
 
         const annotations = [
           {
@@ -183,7 +190,47 @@
             y: y(pointA.close),
             dx: 30,
             dy: -40
-          }
+          },
+          {
+            note: {
+              title: "Azure Services Platform, a cloud computing service for Windows, is launched",
+              label: `Closing Price: $${pointB.close.toFixed(2)}`
+            },
+            x: x(pointB.date),
+            y: y(pointB.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "The first retail store opens in Scottsdale, AZ; Window 7 is released",
+              label: `Closing Price: $${pointC.close.toFixed(2)}`
+            },
+            x: x(pointC.date),
+            y: y(pointC.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft becomes a co-founder of the Open Networking Foundation",
+              label: `Closing Price: $${pointD.close.toFixed(2)}`
+            },
+            x: x(pointD.date),
+            y: y(pointD.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft 8 and the Surface are released",
+              label: `Closing Price: $${pointE.close.toFixed(2)}`
+            },
+            x: x(pointE.date),
+            y: y(pointE.close),
+            dx: 30,
+            dy: -40
+          },
         ];
 
         const makeAnnotations = d3.annotation()
