@@ -66,34 +66,13 @@ body {
   z-index: 10;
 "></div>
 
-<div class="center" style="margin-top: 20px;">
-  <label for="decade-select"><strong>Select Time Period:</strong></label>
-  <select id="decade-select">
-    <option value="all">All</option>
-    <option value="1986-1995">1986–1995</option>
-    <option value="1996-2005">1996–2005</option>
-    <option value="2006-2015">2006–2015</option>
-    <option value="2016-2025">2016–2025</option>
-  </select>
-</div>
+<label for="startSlider">Start Date:</label>
+<input type="range" id="startSlider" min="0" max="100" value="0" step="1">
+<span id="startLabel"></span><br>
 
-<div class="center" style="margin-top: 20px;">
-  <label for="sort-select"><strong>Sort by:</strong></label>
-  <select id="sort-select">
-    <option value="date">Date (Oldest to Newest)</option>
-    <option value="date-desc">Date (Newest to Oldest)</option>
-    <option value="close">Close (High to Low)</option>
-    <option value="close-asc">Close (Low to High)</option>
-    <option value="open">Open (High to Low)</option>
-    <option value="open-asc">Open (Low to High)</option>
-    <option value="high">High (High to Low)</option>
-    <option value="high-asc">High (Low to High)</option>
-    <option value="low">Low (High to Low)</option>
-    <option value="low-asc">Low (Low to High)</option>
-    <option value="volume">Volume (High to Low)</option>
-    <option value="volume-asc">Volume (Low to High)</option>
-  </select>
-</div>
+<label for="endSlider">End Date:</label>
+<input type="range" id="endSlider" min="0" max="100" value="100" step="1">
+<span id="endLabel"></span>
 
 
 <div id="chart" style="text-align: center; margin-top: 20px;"></div>
@@ -112,39 +91,58 @@ body {
     }));
 
     updateChart(); // initial render
-  }
+    // Prepare a sorted date array
+const sortedDates = data.map(d => d.date).sort((a, b) => a - b);
 
-  function updateChart() {
-    const decadeValue = document.getElementById("decade-select").value;
-    const sortValue = document.getElementById("sort-select").value;
-
-    // Filter
-    let filtered = data;
-    if (decadeValue !== "all") {
-      const [start, end] = decadeValue.split("-").map(Number);
-      filtered = data.filter(d => d.date.getFullYear() >= start && d.date.getFullYear() <= end);
+// Set slider bounds
+d3.select("#startSlider")
+  .attr("max", sortedDates.length - 1)
+  .on("input", function () {
+    const startIndex = +this.value;
+    const endIndex = +d3.select("#endSlider").property("value");
+    if (startIndex > endIndex) {
+      this.value = endIndex; // prevent invalid range
     }
+    updateDateLabels();
+    updateChart();
+  });
 
-    // Sort
-    const sorted = [...filtered];
-    const getOrder = (key, asc = false) => (a, b) =>
-      asc ? d3.ascending(a[key], b[key]) : d3.descending(a[key], b[key]);
+d3.select("#endSlider")
+  .attr("max", sortedDates.length - 1)
+  .on("input", function () {
+    const endIndex = +this.value;
+    const startIndex = +d3.select("#startSlider").property("value");
+    if (endIndex < startIndex) {
+      this.value = startIndex; // prevent invalid range
+    }
+    updateDateLabels();
+    updateChart();
+  });
 
-    if (sortValue === "date") sorted.sort(getOrder("date", true));
-    else if (sortValue === "date-desc") sorted.sort(getOrder("date"));
-    else if (sortValue === "close") sorted.sort(getOrder("close"));
-    else if (sortValue === "close-asc") sorted.sort(getOrder("close", true));
-    else if (sortValue === "open") sorted.sort(getOrder("open"));
-    else if (sortValue === "open-asc") sorted.sort(getOrder("open", true));
-    else if (sortValue === "high") sorted.sort(getOrder("high"));
-    else if (sortValue === "high-asc") sorted.sort(getOrder("high", true));
-    else if (sortValue === "low") sorted.sort(getOrder("low"));
-    else if (sortValue === "low-asc") sorted.sort(getOrder("low", true));
-    else if (sortValue === "volume") sorted.sort(getOrder("volume"));
-    else if (sortValue === "volume-asc") sorted.sort(getOrder("volume", true));
+// Update label text
+function updateDateLabels() {
+  const startDate = sortedDates[+d3.select("#startSlider").property("value")];
+  const endDate = sortedDates[+d3.select("#endSlider").property("value")];
+  d3.select("#startLabel").text(d3.timeFormat("%Y-%m-%d")(startDate));
+  d3.select("#endLabel").text(d3.timeFormat("%Y-%m-%d")(endDate));
+}
 
-    renderChart(sorted);
   }
+
+function updateChart() {
+  const startIndex = +d3.select("#startSlider").property("value");
+  const endIndex = +d3.select("#endSlider").property("value");
+
+  const startDate = sortedDates[startIndex];
+  const endDate = sortedDates[endIndex];
+
+  const filteredData = data.filter(d => d.date >= startDate && d.date <= endDate);
+
+  // Update your chart here
+  d3.select("path.line")
+    .datum(filteredData)
+    .attr("d", line); // 'line' is your D3 line generator
+}
 
   function renderChart(filteredData) {
     d3.select("#chart").selectAll("*").remove();
