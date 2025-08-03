@@ -89,133 +89,55 @@ body {
       open: +d.Open,
       volume: +d.Volume
     }));
+
+    const width = 928;
+    const height = 500;
+    const marginTop = 20;
+    const marginRight = 30;
+    const marginBottom = 30;
+    const marginLeft = 40;
+
+    const tooltip = d3.select("#tooltip");
+
     function renderChart(filteredData) {
-      d3.select("#chart").selectAll("*").remove();  // clear existing
+      d3.select("#chart").selectAll("*").remove();
 
       const svg = d3.create("svg")
         .attr("width", width)
         .attr("height", height)
         .attr("viewBox", [0, 0, width, height])
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-    
-      // Declare the chart dimensions and margins.
-      const width = 928;
-      const height = 500;
-      const marginTop = 20;
-      const marginRight = 30;
-      const marginBottom = 30;
-      const marginLeft = 40;
-      
-      // x axis scaling
+
       const x = d3.scaleUtc()
-        .domain(d3.extent(data, d => d.date))
+        .domain(d3.extent(filteredData, d => d.date))
         .range([marginLeft, width - marginRight]);
-    
-      // y axis scaling
+
       const y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.close)])
-        .range([height - marginBottom, marginTop]);  
-      
-      // line generator
+        .domain([0, d3.max(filteredData, d => d.close)])
+        .nice()
+        .range([height - marginBottom, marginTop]);
+
       const line = d3.line()
-          .x(d => x(d.date))
-          .y(d => y(d.close));
-    
-      // svg canvas
-      const svg = d3.create("svg")
-          .attr("width", width)
-          .attr("height", height)
-          .attr("viewBox", [0, 0, width, height])
-          .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-    
-      // indicator with tooltip 
+        .x(d => x(d.date))
+        .y(d => y(d.close));
+
       const hoverLine = svg.append("line")
         .attr("stroke", "gray")
         .attr("stroke-width", 1)
         .attr("y1", marginTop)
         .attr("y2", height - marginBottom)
         .style("visibility", "hidden");
-      
-      // tooltip div
-      const tooltip = d3.select("#tooltip");
-  
-      // x axis
-      svg.append("g")
-          .attr("transform", `translate(0,${height - marginBottom})`)
-          .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
-    
-      // y axis
-      svg.append("g")
-          .attr("transform", `translate(${marginLeft},0)`)
-          .call(d3.axisLeft(y).ticks(height / 40))
-          .call(g => g.select(".domain").remove())
-          .call(g => g.selectAll(".tick line").clone()
-              .attr("x2", width - marginLeft - marginRight)
-              .attr("stroke-opacity", 0.1))
-          .call(g => g.append("text")
-              .attr("x", -marginLeft)
-              .attr("y", 10)
-              .attr("fill", "currentColor")
-              .attr("text-anchor", "start")
-              .text("↑ Daily close ($)"));
-      
-      svg.append("g")
-        .selectAll("rect")
-        .data(data)
-        .join("rect")
-          .attr("x", d => x(d.date) - 5)           
-          .attr("width", 10)                       
-          .attr("y", marginTop)
-          .attr("height", height - marginTop - marginBottom)
-          .attr("fill", "transparent")
-          .attr("pointer-events", "all")
-          .on("mouseover", function(event, d) {
-            tooltip
-              .style("opacity", 1)
-              .html(`<strong>Date:</strong> ${d.date.toLocaleDateString()}<br>
-                     <strong>Close:</strong> $${d.close.toFixed(2)}<br>
-                     <strong>High:</strong> $${d.high.toFixed(2)}<br>
-                     <strong>Low:</strong> $${d.low.toFixed(2)}<br>
-                     <strong>Open:</strong> $${d.open.toFixed(2)}<br>
-                     <strong>Volume:</strong> ${d.volume}<br>`)
-              .style("left", (event.pageX + 10) + "px")
-              .style("top", (event.pageY - 28) + "px");
-            hoverLine
-              .attr("x1", x(d.date))
-              .attr("x2", x(d.date))
-              .style("visibility", "visible");
-          })
-        .on("mouseout", function() {
-          tooltip.style("opacity", 0);
-          hoverLine.style("visibility", "hidden");
-          });
-      
-      // line path
-      svg.append("path")
-          .attr("fill", "none")
-          .attr("stroke", "steelblue")
-          .attr("stroke-width", 1.5)
-          .attr("d", line(data));
-      
-      document.getElementById("decade-select").addEventListener("change", (event) => {
-        const value = event.target.value;
-        let filtered = data;
-      
-        if (value !== "all") {
-          const [start, end] = value.split("-").map(Number);
-          filtered = data.filter(d => d.date.getFullYear() >= start && d.date.getFullYear() <= end);
-        }
-      
-        renderChart(filtered);
-      });
 
-        renderChart(data); // initial chart
+      // x-axis
+      svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
 
-        
-      document.getElementById("chart").appendChild(svg.node());
-    }
-  }
-</script>
+      // y-axis
+      svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y).ticks(hei
+
   
 </body>
 </html>
