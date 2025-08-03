@@ -175,6 +175,12 @@
         const dateD = new Date("2011-03-23");
         const dateE = new Date("2012-10-26");
         const dateF = new Date("2013-07-19");
+        const dateG = new Date("2013-09-03");
+        const dateH = new Date("2014-04-25");
+        const dateI = new Date("2014-09-15");
+        const dateJ = new Date("2017-06-08");
+        const dateK = new Date("2018-10-26");
+        const dateL = new Date("2018-11-28");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
@@ -182,6 +188,12 @@
         const pointD = findClosestDate(data, dateD);
         const pointE = findClosestDate(data, dateE);
         const pointF = findClosestDate(data, dateF);
+        const pointG = findClosestDate(data, dateG);
+        const pointH = findClosestDate(data, dateH);
+        const pointI = findClosestDate(data, dateI);
+        const pointJ = findClosestDate(data, dateJ);
+        const pointK = findClosestDate(data, dateK);
+        const pointL = findClosestDate(data, dateL);
 
         const annotations = [
           {
@@ -244,6 +256,66 @@
             dx: 30,
             dy: -40
           },
+          {
+            note: {
+              title: "Microsoft agrees to purchase Nokia's mobile unit",
+              label: `Closing Price: $${pointG.close.toFixed(2)}`
+            },
+            x: x(pointG.date),
+            y: y(pointG.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Nokia Devices and Services is acquired for $7.2 billion",
+              label: `Closing Price: $${pointH.close.toFixed(2)}`
+            },
+            x: x(pointB.date),
+            y: y(pointB.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Mojang is acquired for $2.5 billion",
+              label: `Closing Price: $${pointI.close.toFixed(2)}`
+            },
+            x: x(pointI.date),
+            y: y(pointI.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Hexadite is acquired for $100 million",
+              label: `Closing Price: $${pointJ.close.toFixed(2)}`
+            },
+            x: x(pointJ.date),
+            y: y(pointJ.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "GitHub is acquired for $7.5 billion",
+              label: `Closing Price: $${pointK.close.toFixed(2)}`
+            },
+            x: x(pointK.date),
+            y: y(pointK.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft agrees to supply 100,000 HoloLens to the U.S. military",
+              label: `Closing Price: $${pointL.close.toFixed(2)}`
+            },
+            x: x(pointL.date),
+            y: y(pointL.close),
+            dx: 30,
+            dy: -40
+          }
         ];
 
         const makeAnnotations = d3.annotation()
