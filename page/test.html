@@ -77,6 +77,25 @@ body {
   </select>
 </div>
 
+<div class="center" style="margin-top: 20px;">
+  <label for="sort-select"><strong>Sort by:</strong></label>
+  <select id="sort-select">
+    <option value="date">Date (Oldest to Newest)</option>
+    <option value="date-desc">Date (Newest to Oldest)</option>
+    <option value="close">Close (High to Low)</option>
+    <option value="close-asc">Close (Low to High)</option>
+    <option value="open">Open (High to Low)</option>
+    <option value="open-asc">Open (Low to High)</option>
+    <option value="high">High (High to Low)</option>
+    <option value="high-asc">High (Low to High)</option>
+    <option value="low">Low (High to Low)</option>
+    <option value="low-asc">Low (Low to High)</option>
+    <option value="volume">Volume (High to Low)</option>
+    <option value="volume-asc">Volume (Low to High)</option>
+  </select>
+</div>
+
+
 <div id="chart" style="text-align: center; margin-top: 20px;"></div>
 
 <script>
@@ -204,6 +223,29 @@ body {
     });
 
     renderChart(data); // initial render
+    document.getElementById("sort-select").addEventListener("change", (event) => {
+      const value = event.target.value;
+      const sorted = [...data]; // make a copy
+    
+      const getOrder = (key, asc = false) => (a, b) =>
+        asc ? d3.ascending(a[key], b[key]) : d3.descending(a[key], b[key]);
+    
+      if (value === "date") sorted.sort(getOrder("date", true));
+      else if (value === "date-desc") sorted.sort(getOrder("date"));
+      else if (value === "close") sorted.sort(getOrder("close"));
+      else if (value === "close-asc") sorted.sort(getOrder("close", true));
+      else if (value === "open") sorted.sort(getOrder("open"));
+      else if (value === "open-asc") sorted.sort(getOrder("open", true));
+      else if (value === "high") sorted.sort(getOrder("high"));
+      else if (value === "high-asc") sorted.sort(getOrder("high", true));
+      else if (value === "low") sorted.sort(getOrder("low"));
+      else if (value === "low-asc") sorted.sort(getOrder("low", true));
+      else if (value === "volume") sorted.sort(getOrder("volume"));
+      else if (value === "volume-asc") sorted.sort(getOrder("volume", true));
+    
+      renderChart(sorted);
+    });
+
   }
 </script>
   
