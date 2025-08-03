@@ -35,14 +35,18 @@ body {
   opacity: 0.5;
   color: white;
 }
+table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
 </style>
 
 <title>Main Page</title>
   
 </head>
   
-<body onload='init()'>
-<h1 style="text-align: center;">Microsoft (MSFT) Stock Price History, 1986-2025</h1>
+<body>
+<h1 style="text-align: center;">Microsoft (MSFT) Stock Price History</h1>
 <p style="text-align: center;">
   <i>daily market closing price data from 
     <a href="https://www.kaggle.com/datasets/taimoor888/microsoft-stock-price-data-19862024">
@@ -51,136 +55,68 @@ body {
 </p>
   
 <div class="center">
-  <a href="https://ashley19-124.github.io/cs416/page/first.html" class="button button1">Start Over</a>
+  <a href="https://ashley19-124.github.io/cs416/page/second.html" class="button button1">Begin</a>
 </div>
 
-<div id="tooltip" style="
-  position: absolute;
-  opacity: 0;
-  background: white;
-  border: 1px solid gray;
-  padding: 8px;
-  font-size: 12px;
-  pointer-events: none;
-  border-radius: 4px;
-  z-index: 10;
-"></div>
+<div id="bio" style="text-align: center; margin-top: 20px;">
+  <h2>The Microsoft Corporation</h2>
+  <p>Sources:
+    <a href="https://en.wikipedia.org/wiki/Microsoft">1</a>
+    <a href="https://en.wikipedia.org/wiki/Bill_Gates">2</a>
+    <a href="https://en.wikipedia.org/wiki/Paul_Allen">3</a>
+  </p>
+  <p>
+    Founded in 1975 by Bill Gates and Paul Allen in 1975, Microsoft was created to develop and sell BASIC interpreters for the Altair 8800, 
+    a microcomputer created in 1974. Currently, it is multinational corporation that is ubiquitous in the tech world. It is known for its
+    variety of iconic products from software to hardware, including the Windows OS, Microsoft Office Suite, Edge web browser, Xbox, and
+    much more.
+  </p>
+  <p></p>
+  <p>
+    From its initial public offering (IPO) in 1986, Microsoft's share price has increased from just $0.06 to almost $360 in April 2025. However,
+    this journey was in no way smooth; from scandals with the US government to poor business decisions, Microsoft has had its fair share of
+    difficulty. Despite that, it has remained a staple of the modern tech scene and will continue to be for years to come.
+  </p>
+  <p></p>
+</div>
 
-<div id="chart" style="text-align: center; margin-top: 20px;"></div>
-
-<script>
-  async function init(){
-    const data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d=> ({
-      date: new Date(d.Date),
-      close: +d.Close,
-      high: +d.High,
-      low: +d.Low,
-      open: +d.Open,
-      volume: +d.Volume
-    }));
-
-    // Declare the chart dimensions and margins.
-    const width = 928;
-    const height = 500;
-    const marginTop = 20;
-    const marginRight = 30;
-    const marginBottom = 30;
-    const marginLeft = 40;
-    
-    // x axis scaling
-    const x = d3.scaleUtc()
-      .domain(d3.extent(data, d => d.date))
-      .range([marginLeft, width - marginRight]);
-  
-    // y axis scaling
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.close)])
-      .range([height - marginBottom, marginTop]);  
-    
-    // line generator
-    const line = d3.line()
-        .x(d => x(d.date))
-        .y(d => y(d.close));
-  
-    // svg canvas
-    const svg = d3.create("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [0, 0, width, height])
-        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-  
-    // indicator with tooltip 
-    const hoverLine = svg.append("line")
-      .attr("stroke", "gray")
-      .attr("stroke-width", 1)
-      .attr("y1", marginTop)
-      .attr("y2", height - marginBottom)
-      .style("visibility", "hidden");
-    
-    // tooltip div
-    const tooltip = d3.select("#tooltip");
-
-    // x axis
-    svg.append("g")
-        .attr("transform", `translate(0,${height - marginBottom})`)
-        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
-  
-    // y axis
-    svg.append("g")
-        .attr("transform", `translate(${marginLeft},0)`)
-        .call(d3.axisLeft(y).ticks(height / 40))
-        .call(g => g.select(".domain").remove())
-        .call(g => g.selectAll(".tick line").clone()
-            .attr("x2", width - marginLeft - marginRight)
-            .attr("stroke-opacity", 0.1))
-        .call(g => g.append("text")
-            .attr("x", -marginLeft)
-            .attr("y", 10)
-            .attr("fill", "currentColor")
-            .attr("text-anchor", "start")
-            .text("↑ Daily close ($)"));
-    
-    svg.append("g")
-      .selectAll("rect")
-      .data(data)
-      .join("rect")
-        .attr("x", d => x(d.date) - 5)           
-        .attr("width", 10)                       
-        .attr("y", marginTop)
-        .attr("height", height - marginTop - marginBottom)
-        .attr("fill", "transparent")
-        .attr("pointer-events", "all")
-        .on("mouseover", function(event, d) {
-          tooltip
-            .style("opacity", 1)
-            .html(`<strong>Date:</strong> ${d.date.toLocaleDateString()}<br>
-                   <strong>Close:</strong> $${d.close.toFixed(2)}<br>
-                   <strong>High:</strong> $${d.high.toFixed(2)}<br>
-                   <strong>Low:</strong> $${d.low.toFixed(2)}<br>
-                   <strong>Open:</strong> $${d.open.toFixed(2)}<br>
-                   <strong>Volume:</strong> ${d.volume}<br>`)
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 28) + "px");
-          hoverLine
-            .attr("x1", x(d.date))
-            .attr("x2", x(d.date))
-            .style("visibility", "visible");
-        })
-      .on("mouseout", function() {
-        tooltip.style("opacity", 0);
-        hoverLine.style("visibility", "hidden");
-        });
-    
-    // line path
-    svg.append("path")
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("d", line(data));
-  
-    document.getElementById("chart").appendChild(svg.node());
-  }
-</script>
-  
+<div style="text-align: center; margin-top: 20px;">
+  <h3>The Founders and Their Impacts</h3>
+  <p> </p>
+  <table style="width:100%" border="1">
+  <tr>
+    <th>Bill Gates</th>
+    <th style="width: 150px">&nbsp;</th>
+    <th>Paul Allen</th> 
+  </tr>
+  <tr>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Visit_of_Bill_Gates_to_the_European_Commission_-_P062021-203496.jpg" 
+          alt="bill gates eu commission"
+          style="width:192px;height:240px;"></td>
+    <td>&nbsp;</td>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Paul_G._Allen_%28cropped%29.jpg" alt="paul allen"
+          style="width:192px;height:240px;"></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+      After co-founding the company in 1975, Gates served as its CEO for the first 25 years. During his time as CEO, he also became president 
+      and chairman of the board when the company was incorporated in 1981. After stepping down as CEO, he took on the role of chief software 
+      architect and stayed in it until 2008. He then stepped down as chairman of the board in 2014 and completely resigned from the board in
+      2020. Currently, he serves as a technology adviser to the current CEO and other high-ranking leaders at Microsoft.
+    </td>
+    <td>&nbsp;</td>
+    <td>
+      Paul Allen is credited with creating the name "Microsoft", which comes from the combination of the words "microcomputer" and "software".
+      When Gates became Microsoft's president and chairman of the board in 1981, Allen became the executive vice president and vice chairman.
+      Allen left Microsoft in 1982 after being diagonsed with Hodgkin's lymphoma but remained on the board of directors until 2000. He passed
+      away in 2018 due to complications with cancer.
+    </td>
+  </tr>
+</div> 
 </body>
 </html>
