@@ -171,9 +171,13 @@
         
         const dateA = new Date("2020-03-11");
         const dateB = new Date("2020-09-22");
+        const dateC = new Date("2022-03-04");
+        const dateD = new Date("2021-10-05");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
+        const pointC = findClosestDate(data, dateC);
+        const pointD = findClosestDate(data, dateD);
 
         const annotations = [
           {
@@ -195,7 +199,27 @@
             y: y(pointB.close),
             dx: 30,
             dy: -40
-          }
+          },
+          {
+            note: {
+              title: "Microsoft acquires Nuance Communications for $16 billion",
+              label: `Closing Price: $${pointC.close.toFixed(2)}`
+            },
+            x: x(pointC.date),
+            y: y(pointC.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Windows 11 is released to the public",
+              label: `Closing Price: $${pointD.close.toFixed(2)}`
+            },
+            x: x(pointD.date),
+            y: y(pointD.close),
+            dx: 30,
+            dy: -40
+          },
         ];
 
         const makeAnnotations = d3.annotation()
