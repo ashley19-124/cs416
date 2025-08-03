@@ -78,147 +78,62 @@ body {
 <div id="chart" style="text-align: center; margin-top: 20px;"></div>
 
 <script>
-  let data = []; // move to global scope
+let data = [];
+let sortedDates = [];
 
-  async function init() {
-    data = await d3.csv("https://raw.githubusercontent.com/ashley19-124/cs416/refs/heads/main/images/Microsoft_stock_data_cleaned.csv", d => ({
-      date: new Date(d.Date),
-      close: +d.Close,
-      high: +d.High,
-      low: +d.Low,
-      open: +d.Open,
-      volume: +d.Volume
-    }));
+async function init() {
+  data = await d3.csv("...csv", d => ({
+    date: new Date(d.Date),
+    close: +d.Close,
+    high: +d.High,
+    low: +d.Low,
+    open: +d.Open,
+    volume: +d.Volume
+  }));
 
-    updateChart(); // initial render
-    // Prepare a sorted date array
-const sortedDates = data.map(d => d.date).sort((a, b) => a - b);
+  sortedDates = data.map(d => d.date).sort((a, b) => a - b);
 
-// Set slider bounds
-d3.select("#startSlider")
-  .attr("max", sortedDates.length - 1)
-  .on("input", function () {
-    const startIndex = +this.value;
-    const endIndex = +d3.select("#endSlider").property("value");
-    if (startIndex > endIndex) {
-      this.value = endIndex; // prevent invalid range
-    }
-    updateDateLabels();
-    updateChart();
-  });
+  const startSlider = d3.select("#startSlider").attr("max", sortedDates.length - 1);
+  const endSlider = d3.select("#endSlider").attr("max", sortedDates.length - 1).property("value", sortedDates.length - 1);
 
-d3.select("#endSlider")
-  .attr("max", sortedDates.length - 1)
-  .on("input", function () {
-    const endIndex = +this.value;
-    const startIndex = +d3.select("#startSlider").property("value");
-    if (endIndex < startIndex) {
-      this.value = startIndex; // prevent invalid range
-    }
-    updateDateLabels();
-    updateChart();
-  });
+  startSlider.on("input", handleSliderChange);
+  endSlider.on("input", handleSliderChange);
 
-// Update label text
-function updateDateLabels() {
-  const startDate = sortedDates[+d3.select("#startSlider").property("value")];
-  const endDate = sortedDates[+d3.select("#endSlider").property("value")];
-  d3.select("#startLabel").text(d3.timeFormat("%Y-%m-%d")(startDate));
-  d3.select("#endLabel").text(d3.timeFormat("%Y-%m-%d")(endDate));
+  updateDateLabels();
+  updateChart();
 }
 
+function handleSliderChange() {
+  const startIndex = +d3.select("#startSlider").property("value");
+  const endIndex = +d3.select("#endSlider").property("value");
+
+  if (startIndex > endIndex) {
+    this.id === "startSlider"
+      ? d3.select("#startSlider").property("value", endIndex)
+      : d3.select("#endSlider").property("value", startIndex);
   }
+
+  updateDateLabels();
+  updateChart();
+}
+
+function updateDateLabels() {
+  const start = sortedDates[+d3.select("#startSlider").property("value")];
+  const end = sortedDates[+d3.select("#endSlider").property("value")];
+  d3.select("#startLabel").text(d3.timeFormat("%Y-%m-%d")(start));
+  d3.select("#endLabel").text(d3.timeFormat("%Y-%m-%d")(end));
+}
 
 function updateChart() {
   const startIndex = +d3.select("#startSlider").property("value");
   const endIndex = +d3.select("#endSlider").property("value");
-
   const startDate = sortedDates[startIndex];
   const endDate = sortedDates[endIndex];
 
   const filteredData = data.filter(d => d.date >= startDate && d.date <= endDate);
-
-  // Update your chart here
-  d3.select("path.line")
-    .datum(filteredData)
-    .attr("d", line); // 'line' is your D3 line generator
+  renderChart(filteredData);
 }
 
-  function renderChart(filteredData) {
-    d3.select("#chart").selectAll("*").remove();
-
-    const width = 928;
-    const height = 500;
-    const marginTop = 20;
-    const marginRight = 30;
-    const marginBottom = 30;
-    const marginLeft = 40;
-
-    const tooltip = d3.select("#tooltip");
-
-    const svg = d3.create("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [0, 0, width, height])
-      .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-
-    const x = d3.scaleUtc()
-      .domain(d3.extent(filteredData, d => d.date))
-      .range([marginLeft, width - marginRight]);
-
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(filteredData, d => d.close)])
-      .nice()
-      .range([height - marginBottom, marginTop]);
-
-    svg.append("g")
-      .attr("transform", `translate(0,${height - marginBottom})`)
-      .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
-
-    svg.append("g")
-      .attr("transform", `translate(${marginLeft},0)`)
-      .call(d3.axisLeft(y).ticks(height / 40))
-      .call(g => g.select(".domain").remove())
-      .call(g => g.selectAll(".tick line").clone()
-        .attr("x2", width - marginLeft - marginRight)
-        .attr("stroke-opacity", 0.1))
-      .call(g => g.append("text")
-        .attr("x", -marginLeft)
-        .attr("y", 10)
-        .attr("fill", "currentColor")
-        .attr("text-anchor", "start")
-        .text("↑ Daily close ($)"));
-
-    svg.append("g")
-      .selectAll("circle")
-      .data(filteredData)
-      .join("circle")
-      .attr("cx", d => x(d.date))
-      .attr("cy", d => y(d.close))
-      .attr("r", 3)
-      .attr("fill", "steelblue")
-      .on("mouseover", function(event, d) {
-        tooltip
-          .style("opacity", 1)
-          .html(`<strong>Date:</strong> ${d.date.toLocaleDateString()}<br>
-                 <strong>Close:</strong> $${d.close.toFixed(2)}<br>
-                 <strong>High:</strong> $${d.high.toFixed(2)}<br>
-                 <strong>Low:</strong> $${d.low.toFixed(2)}<br>
-                 <strong>Open:</strong> $${d.open.toFixed(2)}<br>
-                 <strong>Volume:</strong> ${d.volume}<br>`)
-          .style("left", (event.pageX + 10) + "px")
-          .style("top", (event.pageY - 28) + "px");
-      })
-      .on("mouseout", function() {
-        tooltip.style("opacity", 0);
-      });
-
-    document.getElementById("chart").appendChild(svg.node());
-  }
-
-  // Attach handlers
-  document.getElementById("decade-select").addEventListener("change", updateChart);
-  document.getElementById("sort-select").addEventListener("change", updateChart);
 </script>
 
 </body>
