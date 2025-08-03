@@ -173,11 +173,25 @@
         const dateB = new Date("2020-09-22");
         const dateC = new Date("2022-03-04");
         const dateD = new Date("2021-10-05");
+        const dateE = new Date("2021-09-10");
+        const dateF = new Date("2023-10-23");
+        const dateG = new Date("2023-06-21");
+        const dateH = new Date("2024-03-19");
+        const dateI = new Date("2024-07-19");
+        const dateJ = new Date("2024-09-19");
+        const dateK = new Date("2025-04-04");
 
         const pointA = findClosestDate(data, dateA);
         const pointB = findClosestDate(data, dateB);
         const pointC = findClosestDate(data, dateC);
         const pointD = findClosestDate(data, dateD);
+        const pointE = findClosestDate(data, dateE);
+        const pointF = findClosestDate(data, dateF);
+        const pointG = findClosestDate(data, dateG);
+        const pointH = findClosestDate(data, dateH);
+        const pointI = findClosestDate(data, dateI);
+        const pointJ = findClosestDate(data, dateJ);
+        const pointK = findClosestDate(data, dateK);
 
         const annotations = [
           {
@@ -220,6 +234,76 @@
             dx: 0,
             dy: -40
           },
+          {
+            note: {
+              title: "Microsoft acquires online learning startup TakeLessons",
+              label: `Closing Price: $${pointE.close.toFixed(2)}`
+            },
+            x: x(pointE.date),
+            y: y(pointE.close),
+            dx: 30,
+            dy: 60
+          },
+          {
+            note: {
+              title: "Microsoft acquires Activision Blizzard for $68.7 billion",
+              label: `Closing Price: $${pointF.close.toFixed(2)}`
+            },
+            x: x(pointF.date),
+            y: y(pointF.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft announces Azure Quantum Elements",
+              label: `Closing Price: $${pointG.close.toFixed(2)}`
+            },
+            x: x(pointG.date),
+            y: y(pointG.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft licenses Inflection's technology for $650 million",
+              label: `Closing Price: $${pointH.close.toFixed(2)}`
+            },
+            x: x(pointH.date),
+            y: y(pointH.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "A global IT outage impacts Microsoft services worldwide",
+              label: `Closing Price: $${pointI.close.toFixed(2)}`
+            },
+            x: x(pointI.date),
+            y: y(pointI.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft teams up with BlackRock to fund the Global AI Infrastructure Investment Partnership",
+              label: `Closing Price: $${pointJ.close.toFixed(2)}`
+            },
+            x: x(pointJ.date),
+            y: y(pointJ.close),
+            dx: 30,
+            dy: -40
+          },
+          {
+            note: {
+              title: "Microsoft celebrates its 50th anniversary",
+              label: `Closing Price: $${pointI.close.toFixed(2)}`
+            },
+            x: x(pointI.date),
+            y: y(pointI.close),
+            dx: 30,
+            dy: -40
+          }
         ];
 
         const makeAnnotations = d3.annotation()
